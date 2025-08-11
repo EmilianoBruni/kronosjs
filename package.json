@@ -31,18 +31,23 @@
   },
   "homepage": "https://github.com/EmilianoBruni/cron-manager#readme",
   "type": "module",
+  "dependencies": {
+    "cron": "^4.3.3"
+  },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
     "@tapjs/core": "^4.0.1",
     "@tapjs/tsx": "^3.0.1",
     "@tsconfig/node20": "^20.1.6",
     "@types/node": "^24.2.1",
+    "@types/sinon": "^17.0.4",
     "eslint": "^9.33.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "globals": "^16.3.0",
     "rimraf": "^6.0.1",
     "rollup": "^4.46.2",
+    "sinon": "^21.0.0",
     "tap": "^21.1.0",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.20.3",
@@ -62,8 +67,5 @@
       "!@tapjs/typescript"
     ]
   },
-  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
-  "dependencies": {
-    "cron": "^4.3.3"
-  }
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
 }
