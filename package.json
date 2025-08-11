@@ -32,22 +32,22 @@
   "homepage": "https://github.com/EmilianoBruni/cron-manager#readme",
   "type": "module",
   "devDependencies": {
-    "@eslint/js": "^9.25.1",
+    "@eslint/js": "^9.33.0",
     "@tapjs/core": "^4.0.1",
     "@tapjs/tsx": "^3.0.1",
-    "@tsconfig/node20": "^20.1.5",
-    "@types/node": "^22.15.2",
-    "eslint": "^9.25.1",
-    "eslint-config-prettier": "^10.1.2",
-    "eslint-plugin-prettier": "^5.2.6",
-    "globals": "^16.0.0",
+    "@tsconfig/node20": "^20.1.6",
+    "@types/node": "^24.2.1",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.3.0",
     "rimraf": "^6.0.1",
-    "rollup": "^4.40.0",
+    "rollup": "^4.46.2",
     "tap": "^21.1.0",
-    "tsc-alias": "^1.8.15",
-    "tsx": "^4.19.3",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.31.0"
+    "tsc-alias": "^1.8.16",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.39.0"
   },
   "exports": {
     "import": {
@@ -61,5 +61,9 @@
       "@tapjs/tsx",
       "!@tapjs/typescript"
     ]
+  },
+  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39",
+  "dependencies": {
+    "cron": "^4.3.3"
   }
 }
