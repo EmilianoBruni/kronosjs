@@ -14,3 +14,12 @@ export type CJParams = CJNamedParams & {
 export type CJNamedJob = CJBaseJob & Required<Pick<CJBaseJob, 'name'>>;
 
 export type CJJob = CJNamedJob;
+
+export type CJConfig = {
+    dir?: {
+        base: string;
+        writeable?: boolean;
+    };
+    log?: CJLog;
+    name?: string;
+};
