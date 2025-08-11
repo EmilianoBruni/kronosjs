@@ -1,0 +1,16 @@
+/docker
+.devcontainer.json
+.tap
+.vscode
+.dockerignore
+.eslintrc.json
+.prettierrc.json
+.github
+.husky
+test
+src/*
+@types
+tsconfig.json
+tsconfig.build.json
+eslint.config.js
+.env.dev.local

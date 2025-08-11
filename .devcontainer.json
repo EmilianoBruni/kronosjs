@@ -1,0 +1,7 @@
+// For format details, see https://aka.ms/devcontainer.json.
+{
+	"name": "cron",
+	"dockerComposeFile": "docker/docker-compose.vscode.yml",
+	"service": "manager",
+	"workspaceFolder": "/ws/cron-manager"
+}
