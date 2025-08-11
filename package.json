@@ -32,7 +32,11 @@
   "homepage": "https://github.com/EmilianoBruni/cron-manager#readme",
   "type": "module",
   "dependencies": {
-    "cron": "^4.3.3"
+    "ansis": "^4.1.0",
+    "chokidar": "^4.0.3",
+    "cron": "^4.3.3",
+    "dayjs": "^1.11.13",
+    "figures": "^6.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
