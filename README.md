@@ -11,7 +11,8 @@ _Manage, monitor, and control scheduled cron jobs with terminal integration and 
 
 ## ✨ Features
 
-- 🖥️ **REST APII**: List jobs, view details, create/edit, start/stop, and see run logs. Automate and integrate with CI/CD
+- 🧱 **Built on cron**: Uses the standard [cron](https://www.npmjs.com/package/cron) package for scheduling core 
+- 🖥️ **REST API**: List jobs, view details, create/edit, start/stop, and see run logs. Automate and integrate with CI/CD
 - ⏰ **Cron Expressions**: Timezone & concurrency controls
 - 🔄 **Hot Reload**: Auto-reload job definitions on change
 - 🧩 **Dynamic Jobs**: Load, run, and manage jobs at runtime
@@ -113,4 +114,4 @@ We welcome contributions!
 
 ## License
 
-Copyright 2024-2025 | Emiliano Bruni <info@ebruni.it>
+Copyright 2024-2025 | Emiliano Bruni
