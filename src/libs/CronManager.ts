@@ -73,6 +73,18 @@ const CronManager = class {
         }
     }
 
+    start() {
+        for (const job of this.jobs.values()) {
+            job.start();
+        }
+    }
+
+    stop() {
+        for (const job of this.jobs.values()) {
+            job.stop();
+        }
+    }
+
     async reloadAll() {
         // TODO: implement reload logic
     }

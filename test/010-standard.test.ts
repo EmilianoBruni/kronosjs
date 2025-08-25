@@ -102,4 +102,42 @@ describe('CronManager', () => {
         expect(cm.job(0)).to.equal(jobNamed);
         expect(jobNamed.name).to.be.a('string');
     });
+
+    it('can start and stop all jobs', () => {
+        const cm = new CronManager();
+
+        const onTick = sinon.spy();
+        const clock = sinon.useFakeTimers();
+
+        const job1 = cm.add({
+            name: 'job1',
+            cronTime: '* * * * * *',
+            start: false,
+            onTick
+        });
+        const job2 = cm.add({
+            name: 'job2',
+            cronTime: '* * * * * *',
+            start: false,
+            onTick
+        });
+
+        expect(cm.count()).to.equal(2);
+
+        cm.start();
+        expect(job1.isActive).to.equal(true);
+        expect(job2.isActive).to.equal(true);
+
+        clock.tick(1000);
+        expect(onTick.callCount).to.equal(2);
+
+        clock.tick(1000);
+        expect(job1.isActive).to.equal(true);
+        expect(job2.isActive).to.equal(true);
+        expect(onTick.callCount).to.equal(4);
+
+        cm.stop();
+        expect(job1.isActive).to.equal(false);
+        expect(job2.isActive).to.equal(false);
+    });
 });
