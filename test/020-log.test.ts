@@ -1,31 +1,28 @@
-import tap from 'tap';
+import { expect } from 'chai';
 import sinon from 'sinon';
 import CronManager from '../src/index.js';
 
-// Can register and manually run a job if API is available
-tap.test('test log functionality', async t => {
-    const logFake = sinon.fake();
-
-    const cm = new CronManager({
-        log: logFake
+describe('CronManager log functionality', () => {
+    afterEach(() => {
+        sinon.restore();
     });
 
-    await cm.loop();
+    it('logs expected messages on loop', async () => {
+        const logFake = sinon.fake();
+        const cm = new CronManager({
+            log: logFake
+        });
 
-    t.ok(
-        logFake
-            .getCall(0)
-            .lastArg.toString()
-            .includes(`${cm.config.name} starting...`),
-        'Expected log message for starting cronjob'
-    );
+        await cm.loop();
 
-    t.ok(
-        logFake.getCall(1).lastArg.toString().includes('Loading cron jobs...'),
-        ' Expected log message for loading cronjobs'
-    );
-});
+        expect(logFake.getCall(0).lastArg.toString()).to.include(
+            `${cm.config.name} starting...`,
+            'Expected log message for starting cronjob'
+        );
 
-tap.teardown(() => {
-    sinon.restore();
+        expect(logFake.getCall(1).lastArg.toString()).to.include(
+            'Loading cron jobs...',
+            'Expected log message for loading cronjobs'
+        );
+    });
 });

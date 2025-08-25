@@ -4,8 +4,8 @@
   "description": "Manage, monitor, and control scheduled cron jobs with terminal integration and a simple REST API",
   "main": "dist/index.js",
   "scripts": {
-    "test": "tap -j4 --allow-incomplete-coverage \"test/**/*.test.?(c)[tj]s\"",
-    "test:coverage": "tap -j4 --show-full-coverage \"test/**/*.test.?(c)[tj]s\"",
+    "test": "mocha test/**/*.test.ts",
+    "test:coverage": "nyc --reporter=text mocha test/**/*.test.ts",
     "buildcjs": "rollup ./dist/index.js --file ./dist/index.cjs --format cjs",
     "build": "pnpm clean && pnpm tsc && pnpm tsc-alias",
     "clean": "rimraf ./dist .tap",
@@ -40,19 +40,21 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
-    "@tapjs/core": "^4.0.1",
-    "@tapjs/tsx": "^3.0.1",
     "@tsconfig/node20": "^20.1.6",
+    "@types/chai": "^5.2.2",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^24.2.1",
     "@types/sinon": "^17.0.4",
+    "chai": "^6.0.1",
     "eslint": "^9.33.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "globals": "^16.3.0",
+    "mocha": "^11.7.1",
+    "nyc": "^17.1.0",
     "rimraf": "^6.0.1",
     "rollup": "^4.46.2",
     "sinon": "^21.0.0",
-    "tap": "^21.1.0",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.20.3",
     "typescript": "^5.9.2",
@@ -65,11 +67,9 @@
     },
     "require": "./dist/index.cjs"
   },
-  "tap": {
-    "plugin": [
-      "@tapjs/tsx",
-      "!@tapjs/typescript"
+  "mocha": {
+    "node-option": [
+      "import=tsx"
     ]
-  },
-  "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
+  }
 }
