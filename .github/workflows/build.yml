@@ -25,8 +25,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: rebuild tap to well include @tapjs/tsx plugin
-        run: npx tap build
-
       - name: Run tests
         run: pnpm test:ci
