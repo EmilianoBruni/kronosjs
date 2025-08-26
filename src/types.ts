@@ -56,7 +56,7 @@ export type CJCronConfig = Static<typeof CJCronConfigSchema>;
  * @property config - (Optional) An asynchronous function that returns the configuration for the cron job.
  * @property name - (Optional) The name of the cron job module.
  */
-export type CJModuleData = {
+export type CJCronJob = {
     default: () => Promise<void>;
     config?: () => Promise<CJCronConfig>;
     name?: string;
