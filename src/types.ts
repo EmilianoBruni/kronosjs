@@ -41,13 +41,21 @@ export type CJConfig = {
  * @property timezone - (Optional) The timezone in which the cron job should run, specified as a string.
  * @property start - (Optional) Indicates whether the cron job should start automatically. Defaults to true.
  */
-export const CJCronConfigSchema = Type.Object({
-    schedule: Type.Union([Type.String(), Type.Date()]),
-    timezone: Type.Optional(Type.String()),
-    start: Type.Optional(Type.Boolean({ default: true }))
-});
+export const CJCronConfigSchema = Type.Record(
+    Type.String(),
+    Type.Object({
+        schedule: Type.Optional(
+            Type.Union([Type.String(), Type.String({ format: 'date-time' })], {
+                default: '* * * * *'
+            })
+        ),
+        timezone: Type.Optional(Type.String({ default: 'UTC' })),
+        start: Type.Optional(Type.Boolean({ default: true }))
+    })
+);
 
-export type CJCronConfig = Static<typeof CJCronConfigSchema>;
+type ValueOf<T> = T[keyof T];
+export type CJCronConfig = ValueOf<Static<typeof CJCronConfigSchema>>;
 
 /**
  * Represents the structure of a cron job module.
