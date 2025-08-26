@@ -1,3 +1,4 @@
+import { CJCronJob } from '@/types.js';
 import { directoryImport } from 'directory-import';
 
 type DirectoryImportOptions = {
@@ -8,7 +9,7 @@ type DirectoryImportOptions = {
 type ModuleInfo = {
     moduleName: string;
     modulePath: string;
-    moduleData: unknown;
+    moduleData: CJCronJob;
 };
 
 class DirectoryImport {
@@ -34,7 +35,7 @@ class DirectoryImport {
                     ret.push({
                         moduleName,
                         modulePath,
-                        moduleData
+                        moduleData: moduleData as CJCronJob
                     });
                 }
             );
