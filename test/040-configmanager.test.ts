@@ -1,13 +1,13 @@
 import { describe, it, beforeEach } from 'mocha';
 import { expect } from 'chai';
 import { ConfigManager } from '@/libs/ConfigManager.js';
-import type { CJCronConfig } from '@/types.ts';
+import type { KCronConfig } from '@/types.ts';
 import { unlinkSync } from 'node:fs';
 
 const tempDir = '/tmp';
 const fileName = 'test-config.json';
 
-const sampleConfig: Record<string, CJCronConfig> = {
+const sampleConfig: Record<string, KCronConfig> = {
     job1: {
         schedule: '* * * * *',
         start: true

@@ -1,22 +1,22 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import CronManager from '@/index.js';
+import Kronos from '@/index.js';
 import type { CJBaseParams } from '@/index.js';
 import { CronJob } from 'cron';
 
-describe('CronManager', () => {
+describe('Kronos', () => {
     afterEach(() => {
         sinon.restore();
     });
 
     it('is a constructible class', () => {
-        expect(CronManager).to.be.a('function');
-        const cm = new CronManager();
+        expect(Kronos).to.be.a('function');
+        const cm = new Kronos();
         expect(cm).to.be.not.equal(null);
     });
 
     it('can register and manually run a job every second', () => {
-        const cm = new CronManager();
+        const cm = new Kronos();
 
         expect(cm).to.have.property('add');
         expect(cm).to.have.property('from');
@@ -60,7 +60,7 @@ describe('CronManager', () => {
     });
 
     it('can get job by name or id and remove', () => {
-        const cm = new CronManager();
+        const cm = new Kronos();
         const jobDef: CJBaseParams = {
             name: 'test-job',
             cronTime: `* * * * * *`,
@@ -92,7 +92,7 @@ describe('CronManager', () => {
     });
 
     it('can add a CronTab instance', () => {
-        const cm = new CronManager();
+        const cm = new Kronos();
 
         const job = new CronJob('* * * * * *', () => {}, null, false);
 
@@ -104,7 +104,7 @@ describe('CronManager', () => {
     });
 
     it('can start and stop all jobs', () => {
-        const cm = new CronManager();
+        const cm = new Kronos();
 
         const onTick = sinon.spy();
         const clock = sinon.useFakeTimers();

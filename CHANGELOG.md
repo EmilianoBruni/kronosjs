@@ -20,4 +20,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Template
 
 
-[0.1.0]: https://github.com/EmilianoBruni/cron-manager/releases/tag/v0.1.0
+[0.1.0]: https://github.com/EmilianoBruni/kronosjs/releases/tag/v0.1.0

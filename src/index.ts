@@ -1,9 +1,9 @@
 // src/index.ts
 
-import type { CJBaseParams } from './types.js';
+import type { KBaseParams } from './types.js';
 
-import CronManager from './libs/CronManager.js';
+import Kronos from './libs/Kronos.js';
 
-export default CronManager;
+export default Kronos;
 
-export type { CJBaseParams };
+export type { KBaseParams as CJBaseParams };

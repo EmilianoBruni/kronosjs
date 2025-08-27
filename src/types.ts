@@ -1,20 +1,20 @@
 import { CronJob, CronJobParams } from 'cron';
 import { Type, type Static } from '@sinclair/typebox';
 
-export type CJLog = (message?: any, ...optionalParams: any[]) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
+export type KLog = (message?: any, ...optionalParams: any[]) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-export type CJBaseParams = CronJobParams;
-export type CJBaseJob = CronJob;
+export type KBaseParams = CronJobParams;
+export type KBaseJob = CronJob;
 
-export type CJNamedParams = CJBaseParams & Required<Pick<CJBaseParams, 'name'>>;
+export type KNamedParams = KBaseParams & Required<Pick<KBaseParams, 'name'>>;
 
-export type CJParams = CJNamedParams & {
-    log?: CJLog;
+export type KParams = KNamedParams & {
+    log?: KLog;
 };
 
-export type CJNamedJob = CJBaseJob & Required<Pick<CJBaseJob, 'name'>>;
+export type KNamedJob = KBaseJob & Required<Pick<KBaseJob, 'name'>>;
 
-export type CJJob = CJNamedJob;
+export type KJob = KNamedJob;
 
 /**
  * Configuration options for the Cron Job manager class.
@@ -25,12 +25,12 @@ export type CJJob = CJNamedJob;
  * @property log - Optional logging configuration of type `CJLog`.
  * @property name - Optional name for the configuration.
  */
-export type CJConfig = {
+export type KConfig = {
     dir?: {
         base: string;
         writeable?: boolean;
     };
-    log?: CJLog;
+    log?: KLog;
     name?: string;
 };
 
@@ -41,7 +41,7 @@ export type CJConfig = {
  * @property timezone - (Optional) The timezone in which the cron job should run, specified as a string.
  * @property start - (Optional) Indicates whether the cron job should start automatically. Defaults to true.
  */
-export const CJCronConfigSchema = Type.Record(
+export const KCronConfigSchema = Type.Record(
     Type.String(),
     Type.Object({
         schedule: Type.Optional(
@@ -55,7 +55,7 @@ export const CJCronConfigSchema = Type.Record(
 );
 
 type ValueOf<T> = T[keyof T];
-export type CJCronConfig = ValueOf<Static<typeof CJCronConfigSchema>>;
+export type KCronConfig = ValueOf<Static<typeof KCronConfigSchema>>;
 
 /**
  * Represents the structure of a cron job module.
@@ -64,8 +64,8 @@ export type CJCronConfig = ValueOf<Static<typeof CJCronConfigSchema>>;
  * @property config - (Optional) An asynchronous function that returns the configuration for the cron job.
  * @property name - (Optional) The name of the cron job module.
  */
-export type CJCronJob = {
+export type KCronJob = {
     default: () => Promise<void>;
-    config?: () => Promise<CJCronConfig>;
+    config?: () => Promise<KCronConfig>;
     name?: string;
 };

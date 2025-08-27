@@ -1,13 +1,13 @@
-# 🚦 Cron Manager for Node.js
+# 🚦 kronosjsJS - Cron Manager for Node.js
 
 _Manage, monitor, and control scheduled cron jobs with terminal integration and a simple REST API_
 
-[![npm package](https://img.shields.io/npm/v/cron-manager.svg)](http://npmjs.org/package/cron-manager)
-[![Build workflow](https://github.com/EmilianoBruni/cron-manager/actions/workflows/build.yml/badge.svg)](https://github.com/EmilianoBruni/cron-manager/actions/workflows/build.yml)
-[![Coverage Status](https://coveralls.io/repos/github/EmilianoBruni/cron-manager/badge.svg?branch=master)](https://coveralls.io/github/EmilianoBruni/cron-manager?branch=master)
-![Last Commit](https://img.shields.io/github/last-commit/EmilianoBruni/cron-manager)
-[![Dependencies](https://img.shields.io/librariesio/github/EmilianoBruni/cron-manager)](https://libraries.io/npm/cron-manager)
-![Downloads](https://img.shields.io/npm/dt/cron-manager)
+[![npm package](https://img.shields.io/npm/v/kronosjs.svg)](http://npmjs.org/package/kronosjs)
+[![Build workflow](https://github.com/EmilianoBruni/kronosjs/actions/workflows/build.yml/badge.svg)](https://github.com/EmilianoBruni/kronosjs/actions/workflows/build.yml)
+[![Coverage Status](https://coveralls.io/repos/github/EmilianoBruni/kronosjs/badge.svg?branch=master)](https://coveralls.io/github/EmilianoBruni/kronosjs?branch=master)
+![Last Commit](https://img.shields.io/github/last-commit/EmilianoBruni/kronosjs)
+[![Dependencies](https://img.shields.io/librariesio/github/EmilianoBruni/kronosjs)](https://libraries.io/npm/kronosjs)
+![Downloads](https://img.shields.io/npm/dt/kronosjs)
 
 ## ✨ Features
 
@@ -104,9 +104,9 @@ Great for quick manual runs, smoke tests, and monitoring during development.
 
 ## Links
 
-- **Report Bugs**: [GitHub Issues](https://github.com/EmilianoBruni/cron-manager/issues)
-- **Feature Requests**: [GitHub Issues](https://github.com/EmilianoBruni/cron-manager/issues)
-- **Help and Support**: [GitHub Discussions](https://github.com/EmilianoBruni/cron-manager)
+- **Report Bugs**: [GitHub Issues](https://github.com/EmilianoBruni/kronosjs/issues)
+- **Feature Requests**: [GitHub Issues](https://github.com/EmilianoBruni/kronosjs/issues)
+- **Help and Support**: [GitHub Discussions](https://github.com/EmilianoBruni/kronosjs)
 
 ## Contributing
 

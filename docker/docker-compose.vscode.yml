@@ -1,16 +1,16 @@
 services:
     manager:
-        image: vsc-cron-manager
+        image: vsc-kronosjs
         build: 
             context: ../
             dockerfile: docker/manager/Dockerfile
             args:
-                - IDIR=cron-manager
+                - IDIR=kronosjs
                 #- BMODE=production # default development on Dockerfile
         volumes:
-            - ../:/ws/cron-manager:cached
+            - ../:/ws/kronosjs:cached
             # node_modules in un volume temporaneo che non mi sovraccarica il prj reale in debug
-            - modules:/ws/cron-manager/node_modules
+            - modules:/ws/kronosjs/node_modules
             - pnpm-store:/home/node/pnpm/store
         env_file: ../.env.dev.local
         environment:

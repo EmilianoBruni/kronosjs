@@ -1,4 +1,4 @@
-import { CJCronConfig } from '@/types.js';
+import { KCronConfig } from '@/types.js';
 
 const name = 'emptyJobWithSchema';
 
@@ -6,7 +6,7 @@ async function empty_job() {
     return true;
 }
 
-async function config(): Promise<CJCronConfig> {
+async function config(): Promise<KCronConfig> {
     return {
         schedule: '* * * * *',
         timezone: 'UTC',

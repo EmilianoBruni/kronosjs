@@ -3,5 +3,5 @@
 	"name": "cron",
 	"dockerComposeFile": "docker/docker-compose.vscode.yml",
 	"service": "manager",
-	"workspaceFolder": "/ws/cron-manager"
+	"workspaceFolder": "/ws/kronosjs"
 }

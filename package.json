@@ -1,5 +1,5 @@
 {
-  "name": "cron-manager",
+  "name": "kronosjs",
   "version": "0.1.0",
   "description": "Manage, monitor, and control scheduled cron jobs with terminal integration and a simple REST API",
   "main": "dist/index.js",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EmilianoBruni/cron-manager.git"
+    "url": "git+https://github.com/EmilianoBruni/kronosjs.git"
   },
   "keywords": [
     "nodejs",
@@ -27,9 +27,9 @@
   "author": "Emiliano Bruni <info@ebruni.it>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/EmilianoBruni/cron-manager/issues"
+    "url": "https://github.com/EmilianoBruni/kronosjs/issues"
   },
-  "homepage": "https://github.com/EmilianoBruni/cron-manager#readme",
+  "homepage": "https://github.com/EmilianoBruni/kronosjs#readme",
   "type": "module",
   "dependencies": {
     "@sinclair/typebox": "^0.34.40",

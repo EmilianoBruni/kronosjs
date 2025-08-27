@@ -1,4 +1,4 @@
-import type { CJBaseParams, CJJob, CJConfig } from '../types.js';
+import type { KBaseParams, KJob, KConfig } from '../types.js';
 import { CronJob } from 'cron';
 import ansis from 'ansis';
 import figures from 'figures';
@@ -7,11 +7,11 @@ import DirectoryImport from './DirectoryImport.js';
 
 const className = 'Cron Job Manager';
 
-const CronManager = class {
-    jobs: Map<string, CJJob> = new Map();
-    config: CJConfig = {};
+const Kronos = class {
+    jobs: Map<string, KJob> = new Map();
+    config: KConfig = {};
 
-    constructor(config?: CJConfig) {
+    constructor(config?: KConfig) {
         this.jobs = new Map();
         this.config = config || {};
         if (this.config.dir && !this.config.dir.writeable) {
@@ -22,23 +22,23 @@ const CronManager = class {
         }
     }
 
-    from(cjParamsOrJob: CJBaseParams | CJJob | CronJob): CJJob {
+    from(cjParamsOrJob: KBaseParams | KJob | CronJob): KJob {
         if (!cjParamsOrJob.name) {
             // generate a random name
             cjParamsOrJob.name = `cron-job-${Math.random().toString(36).substring(2, 15)}`;
         }
         if (cjParamsOrJob instanceof CronJob) {
-            const job = cjParamsOrJob as CJJob;
+            const job = cjParamsOrJob as KJob;
             this.jobs.set(cjParamsOrJob.name, job);
             return job;
         }
         //
-        const job = CronJob.from(cjParamsOrJob) as CJJob;
+        const job = CronJob.from(cjParamsOrJob) as KJob;
         this.jobs.set(cjParamsOrJob.name, job);
         return job;
     }
 
-    add(cjParams: CJBaseParams | CJJob | CronJob): CJJob {
+    add(cjParams: KBaseParams | KJob | CronJob): KJob {
         return this.from(cjParams);
     }
 
@@ -53,7 +53,7 @@ const CronManager = class {
         return Array.from(this.jobs.values())[nameOrId];
     }
 
-    async remove(jobOrName: string | CJJob, force: boolean = false) {
+    async remove(jobOrName: string | KJob, force: boolean = false) {
         const job =
             jobOrName instanceof CronJob ? jobOrName : this.jobs.get(jobOrName);
         if (!job) return;
@@ -142,4 +142,4 @@ const CronManager = class {
     }
 };
 
-export default CronManager;
+export default Kronos;

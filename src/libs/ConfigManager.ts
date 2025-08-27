@@ -1,11 +1,11 @@
 import Conf from 'conf';
-import { CJCronConfigSchema, type CJCronConfig } from '@/types.js';
+import { KCronConfigSchema, type KCronConfig } from '@/types.js';
 
 export class ConfigManager {
-    private conf: Conf<Record<string, CJCronConfig>>;
+    private conf: Conf<Record<string, KCronConfig>>;
 
     constructor(filePath: string, fileName: string, humanReadable = true) {
-        this.conf = new Conf<Record<string, CJCronConfig>>({
+        this.conf = new Conf<Record<string, KCronConfig>>({
             configName: fileName.replace(/\.json$/, ''),
             cwd: filePath,
             serialize: value =>
@@ -13,29 +13,29 @@ export class ConfigManager {
                     ? JSON.stringify(value, null, 2)
                     : JSON.stringify(value),
             watch: true,
-            schema: CJCronConfigSchema
+            schema: KCronConfigSchema
         });
     }
 
-    get store(): Record<string, CJCronConfig> {
+    get store(): Record<string, KCronConfig> {
         return this.conf.store;
     }
 
-    set store(config: Record<string, CJCronConfig>) {
+    set store(config: Record<string, KCronConfig>) {
         this.conf.store = config;
     }
 
-    get(key: string, defaultValue?: CJCronConfig): CJCronConfig | undefined {
+    get(key: string, defaultValue?: KCronConfig): KCronConfig | undefined {
         return defaultValue
             ? this.conf.get(key, defaultValue)
             : this.conf.get(key);
     }
 
-    set(key: string, value: CJCronConfig): void;
-    set(obj: Record<string, CJCronConfig>): void;
+    set(key: string, value: KCronConfig): void;
+    set(obj: Record<string, KCronConfig>): void;
     set(
-        keyOrObj: string | Record<string, CJCronConfig>,
-        value?: CJCronConfig
+        keyOrObj: string | Record<string, KCronConfig>,
+        value?: KCronConfig
     ): void {
         if (typeof keyOrObj === 'string' && value !== undefined) {
             this.conf.set(keyOrObj, value);
@@ -76,8 +76,8 @@ export class ConfigManager {
 
     onDidAnyChange(
         callback: (
-            newValue?: Readonly<Record<string, CJCronConfig>>,
-            oldValue?: Readonly<Record<string, CJCronConfig>>
+            newValue?: Readonly<Record<string, KCronConfig>>,
+            oldValue?: Readonly<Record<string, KCronConfig>>
         ) => void
     ): void {
         this.conf.onDidAnyChange(callback);

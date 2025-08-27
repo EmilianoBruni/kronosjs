@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import CronManager from '../src/index.js';
+import Kronos from '../src/index.js';
 
 describe('CronManager log functionality', () => {
     afterEach(() => {
@@ -9,7 +9,7 @@ describe('CronManager log functionality', () => {
 
     it('logs expected messages on loop', async () => {
         const logFake = sinon.fake();
-        const cm = new CronManager({
+        const cm = new Kronos({
             log: logFake
         });
 
