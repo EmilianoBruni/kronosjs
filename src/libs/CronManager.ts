@@ -3,6 +3,7 @@ import { CronJob } from 'cron';
 import ansis from 'ansis';
 import figures from 'figures';
 import dayjs from 'dayjs';
+import DirectoryImport from './DirectoryImport.js';
 
 const className = 'Cron Job Manager';
 
@@ -87,6 +88,7 @@ const CronManager = class {
 
     async reloadAll() {
         // TODO: implement reload logic
+        this._importFromDirectory();
     }
 
     list() {
@@ -95,6 +97,15 @@ const CronManager = class {
 
     listAsArray() {
         return Array.from(this.jobs.values());
+    }
+
+    _importFromDirectory() {
+        if (this.config.dir === undefined || !this.config.dir.base) return;
+        const directoryImport = new DirectoryImport({
+            path: this.config.dir.base,
+            log: this._log
+        });
+        const modules = directoryImport.modules();
     }
 
     async loop() {
