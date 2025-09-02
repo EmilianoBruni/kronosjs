@@ -16,10 +16,10 @@ describe('CronManager log functionality', () => {
             `020-crontab-${Date.now()}.txt`
         );
         const logFake = sinon.fake();
-        const cm = await new Kronos({
+        const cm = await Kronos.create({
             cronTabPath,
             log: logFake
-        }).isReady();
+        });
 
         await cm.loop();
 

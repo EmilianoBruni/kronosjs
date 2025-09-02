@@ -13,6 +13,12 @@ const Kronos = class {
     config: KConfig;
     crontab: Awaited<ReturnType<typeof Crontab>> | undefined;
 
+    public static async create(config: KConfig) {
+        const instance = new Kronos(config);
+        await instance.createCrontab();
+        return instance;
+    }
+
     constructor(config: KConfig) {
         this.jobs = new Map();
         this.config = config;
@@ -22,23 +28,12 @@ const Kronos = class {
         if (!this.config.name) {
             this.config.name = className;
         }
-        Crontab(this.config.cronTabPath).then(crontab => {
-            this.crontab = crontab;
-        });
     }
 
-    async isReady(): Promise<this> {
-        // wait for this.crontab to become ready
-        return new Promise(resolve => {
-            const check = () => {
-                if (this.crontab) {
-                    resolve(this);
-                } else {
-                    setTimeout(check, 100);
-                }
-            };
-            check();
-        });
+    async createCrontab() {
+        const crontab = await Crontab(this.config.cronTabPath);
+        this.crontab = crontab;
+        return crontab;
     }
 
     from(cjParamsOrJob: KBaseParams | KJob | CronJob): KJob {
