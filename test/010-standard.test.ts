@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import Kronos from '@/index.js';
-import type { CJBaseParams } from '@/index.js';
 import { CronJob } from 'cron';
 import path from 'path';
 import fs from 'fs';
+import type { KNamedParams } from '@/types.js';
 
 const file = path.join(process.cwd(), 'test', `010-crontab-${Date.now()}.txt`);
 
@@ -31,10 +31,9 @@ describe('Kronos', () => {
         cm = await Kronos.create({ cronTabPath: file });
 
         expect(cm).to.have.property('add');
-        expect(cm).to.have.property('from');
 
         const onTick = sinon.spy();
-        const jobDef: CJBaseParams = {
+        const jobDef: KNamedParams = {
             name: 'test-job',
             cronTime: `* * * * * *`,
             start: false,
@@ -73,7 +72,7 @@ describe('Kronos', () => {
 
     it('can get job by name or id and remove', async () => {
         cm = await Kronos.create({ cronTabPath: file });
-        const jobDef: CJBaseParams = {
+        const jobDef: KNamedParams = {
             name: 'test-job',
             cronTime: `* * * * * *`,
             start: false,

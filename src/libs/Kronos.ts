@@ -1,4 +1,4 @@
-import type { KBaseParams, KJob, KConfig } from '../types.js';
+import type { KNamedParams, KJob, KConfig } from '../types.js';
 import { CronJob } from 'cron';
 import ansis from 'ansis';
 import figures from 'figures';
@@ -36,24 +36,34 @@ const Kronos = class {
         return crontab;
     }
 
-    from(cjParamsOrJob: KBaseParams | KJob | CronJob): KJob {
+    add(cjParamsOrJob: KNamedParams | KJob | CronJob): KJob {
         if (!cjParamsOrJob.name) {
-            // generate a random name
+            // TODO: consider better name than a generate a random one
             cjParamsOrJob.name = `cron-job-${Math.random().toString(36).substring(2, 15)}`;
         }
+        // search job in crontab
+        if (this.crontab) {
+            const cronTime = this.crontab.get(cjParamsOrJob.name);
+            if (cronTime) {
+                cjParamsOrJob.cronTime = cronTime;
+            } else {
+                // TODO: better definition of cronTime when is a DateTime
+                this.crontab.set(
+                    cjParamsOrJob.name,
+                    cjParamsOrJob.cronTime as string
+                );
+            }
+        }
+
         if (cjParamsOrJob instanceof CronJob) {
             const job = cjParamsOrJob as KJob;
             this.jobs.set(cjParamsOrJob.name, job);
             return job;
         }
-        //
+
         const job = CronJob.from(cjParamsOrJob) as KJob;
         this.jobs.set(cjParamsOrJob.name, job);
         return job;
-    }
-
-    add(cjParams: KBaseParams | KJob | CronJob): KJob {
-        return this.from(cjParams);
     }
 
     count() {
