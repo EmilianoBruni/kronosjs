@@ -6,7 +6,7 @@ export type KLog = (message?: any, ...optionalParams: any[]) => void; // eslint-
 export type KBaseParams = CronJobParams;
 export type KBaseJob = CronJob;
 
-export type KNamedParams = KBaseParams & Required<Pick<KBaseParams, 'name'>>;
+export type KNamedParams = KBaseParams & { name: string };
 
 export type KParams = KNamedParams & {
     log?: KLog;
@@ -45,6 +45,7 @@ export type KConfig = {
 export const KCronConfigSchema = Type.Record(
     Type.String(),
     Type.Object({
+        name: Type.Optional(Type.String()),
         schedule: Type.Optional(
             Type.Union([Type.String(), Type.String({ format: 'date-time' })], {
                 default: '* * * * *'
