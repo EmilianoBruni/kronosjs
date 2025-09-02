@@ -16,6 +16,7 @@ const Kronos = class {
     public static async create(config: KConfig) {
         const instance = new Kronos(config);
         await instance.createCrontab();
+        await instance.reloadAll();
         return instance;
     }
 
@@ -116,9 +117,9 @@ const Kronos = class {
     }
 
     async reloadAll() {
-        if (this.count() !== 0) this.removeAll();
-        // TODO: implement reload logic
-        this._importFromDirectory();
+        if (this.count() !== 0) await this.removeAll();
+        // import all modules from file
+        await this._importFromDirectory();
     }
 
     list() {
@@ -129,7 +130,7 @@ const Kronos = class {
         return Array.from(this.jobs.values());
     }
 
-    _importFromDirectory() {
+    async _importFromDirectory() {
         if (this.config.jobsDir === undefined || !this.config.jobsDir.base)
             return;
         const directoryImport = new DirectoryImport({
@@ -137,6 +138,19 @@ const Kronos = class {
             log: this._log
         });
         const modules = directoryImport.modules();
+        for await (const mod of modules) {
+            const moduleData = mod.moduleData;
+            const job = moduleData.default;
+            const configSrc = moduleData.config ? moduleData.config : undefined;
+            const config = configSrc ? await configSrc() : undefined;
+            const jobCfg: KNamedParams = {
+                cronTime: config?.schedule ? config.schedule : '0 * * * * *',
+                start: config?.start !== undefined ? config.start : false,
+                name: config?.name ? config.name : mod.moduleName,
+                onTick: job
+            };
+            this.add(jobCfg);
+        }
     }
 
     async loop() {
