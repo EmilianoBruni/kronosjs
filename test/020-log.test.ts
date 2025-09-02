@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import Kronos from '../src/index.js';
+import path from 'path';
+import { unlinkSync } from 'fs';
 
 describe('CronManager log functionality', () => {
     afterEach(() => {
@@ -8,10 +10,16 @@ describe('CronManager log functionality', () => {
     });
 
     it('logs expected messages on loop', async () => {
+        const cronTabPath = path.join(
+            process.cwd(),
+            'test',
+            `020-crontab-${Date.now()}.txt`
+        );
         const logFake = sinon.fake();
-        const cm = new Kronos({
+        const cm = await new Kronos({
+            cronTabPath,
             log: logFake
-        });
+        }).isReady();
 
         await cm.loop();
 
@@ -24,5 +32,7 @@ describe('CronManager log functionality', () => {
             'Loading cron jobs...',
             'Expected log message for loading cronjobs'
         );
+        await cm.close();
+        unlinkSync(cronTabPath);
     });
 });

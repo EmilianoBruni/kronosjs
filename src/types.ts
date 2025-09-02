@@ -26,7 +26,8 @@ export type KJob = KNamedJob;
  * @property name - Optional name for the configuration.
  */
 export type KConfig = {
-    dir?: {
+    cronTabPath: string;
+    jobsDir?: {
         base: string;
         writeable?: boolean;
     };

@@ -4,22 +4,41 @@ import ansis from 'ansis';
 import figures from 'figures';
 import dayjs from 'dayjs';
 import DirectoryImport from './DirectoryImport.js';
+import Crontab from './Crontab.js';
 
 const className = 'Cron Job Manager';
 
 const Kronos = class {
     jobs: Map<string, KJob> = new Map();
-    config: KConfig = {};
+    config: KConfig;
+    crontab: Awaited<ReturnType<typeof Crontab>> | undefined;
 
-    constructor(config?: KConfig) {
+    constructor(config: KConfig) {
         this.jobs = new Map();
-        this.config = config || {};
-        if (this.config.dir && !this.config.dir.writeable) {
-            this.config.dir.writeable = false;
+        this.config = config;
+        if (this.config.jobsDir && !this.config.jobsDir.writeable) {
+            this.config.jobsDir.writeable = false;
         }
         if (!this.config.name) {
             this.config.name = className;
         }
+        Crontab(this.config.cronTabPath).then(crontab => {
+            this.crontab = crontab;
+        });
+    }
+
+    async isReady(): Promise<this> {
+        // wait for this.crontab to become ready
+        return new Promise(resolve => {
+            const check = () => {
+                if (this.crontab) {
+                    resolve(this);
+                } else {
+                    setTimeout(check, 100);
+                }
+            };
+            check();
+        });
     }
 
     from(cjParamsOrJob: KBaseParams | KJob | CronJob): KJob {
@@ -86,7 +105,13 @@ const Kronos = class {
         }
     }
 
+    async close() {
+        this.stop();
+        if (this.crontab) await this.crontab.close();
+    }
+
     async reloadAll() {
+        if (this.count() !== 0) this.removeAll();
         // TODO: implement reload logic
         this._importFromDirectory();
     }
@@ -100,9 +125,10 @@ const Kronos = class {
     }
 
     _importFromDirectory() {
-        if (this.config.dir === undefined || !this.config.dir.base) return;
+        if (this.config.jobsDir === undefined || !this.config.jobsDir.base)
+            return;
         const directoryImport = new DirectoryImport({
-            path: this.config.dir.base,
+            path: this.config.jobsDir.base,
             log: this._log
         });
         const modules = directoryImport.modules();
