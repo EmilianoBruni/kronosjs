@@ -57,7 +57,7 @@ describe('DirectoryImport', () => {
             expect(configResult)
                 .to.have.property('schedule')
                 .that.is.a('string')
-                .to.be.equal('* * * * *');
+                .to.be.equal('* 1 * * * *');
             expect(configResult)
                 .to.have.property('timezone')
                 .that.is.a('string')

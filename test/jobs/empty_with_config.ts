@@ -8,7 +8,7 @@ async function empty_job() {
 
 async function config(): Promise<KCronConfig> {
     return {
-        schedule: '* * * * *',
+        schedule: '* 1 * * * *',
         timezone: 'UTC',
         start: true
     };
