@@ -13,6 +13,7 @@ class Kronos extends EventEmitter {
     jobs: Map<string, KJob> = new Map();
     config: KConfig;
     crontab: Awaited<ReturnType<typeof Crontab>> | undefined;
+    directoryImport: DirectoryImport | undefined;
 
     public static async create(config: KConfig) {
         const instance = new Kronos(config);
@@ -27,6 +28,10 @@ class Kronos extends EventEmitter {
         this.config = config;
         if (this.config.jobsDir && !this.config.jobsDir.writeable) {
             this.config.jobsDir.writeable = false;
+            this.directoryImport = new DirectoryImport({
+                path: this.config.jobsDir.base,
+                log: this._log
+            });
         }
         if (!this.config.name) {
             this.config.name = className;
@@ -141,13 +146,13 @@ class Kronos extends EventEmitter {
     }
 
     async _importFromDirectory() {
-        if (this.config.jobsDir === undefined || !this.config.jobsDir.base)
+        if (
+            this.config.jobsDir === undefined ||
+            !this.config.jobsDir.base ||
+            !this.directoryImport
+        )
             return;
-        const directoryImport = new DirectoryImport({
-            path: this.config.jobsDir.base,
-            log: this._log
-        });
-        const modules = directoryImport.modules();
+        const modules = this.directoryImport.modules();
         for await (const mod of modules) {
             const moduleData = mod.moduleData;
             const job = moduleData.default;
