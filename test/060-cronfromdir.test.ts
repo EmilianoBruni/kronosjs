@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import { dirname } from 'path';
 import Kronos from '@/index.js';
-import { unlinkSync, existsSync, readFileSync } from 'fs';
+import { unlinkSync, existsSync, readFileSync, writeFileSync } from 'fs';
 
 const __dirname = dirname(__filename);
 
@@ -64,4 +64,45 @@ describe('Import from Directory', () => {
             cm.close();
         }
     });
+
+    it('should reflect changes in the crontab file', async () => {
+        const cronTabPath = `${__dirname}/060-${Date.now()}.crontab`;
+        tmpFiles.push(cronTabPath);
+        const cm = await Kronos.create({
+            cronTabPath,
+            jobsDir: { base: `${__dirname}/jobs` }
+        });
+        const newCronTime = '* 10 * * * *';
+
+        const asyncReload = new Promise<void>(resolve => {
+            cm.on('loaded', () => {
+                // expect there is two jobs
+                expect(cm.count()).to.equal(
+                    2,
+                    'There should be 2 jobs as files in the directory'
+                );
+                // expect emptyJobWithSchema has now the correct cronTime
+                expect(
+                    cm.job('emptyJobWithSchema')?.cronTime.toString()
+                ).to.equal(
+                    newCronTime,
+                    `emptyJobWithSchema should have updated cronTime`
+                );
+
+                cm.close();
+                resolve();
+            });
+        });
+
+        // modify the crontab file
+        const newCronTabContent = `
+${newCronTime} emptyJobWithSchema
+0 * * * * * empty
+`;
+        writeFileSync(cronTabPath, newCronTabContent);
+
+        return asyncReload;
+    });
+
+    // TODO: it('should reflect changes in the cron directory', async () => {
 });

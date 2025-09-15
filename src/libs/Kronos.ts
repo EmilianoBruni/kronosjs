@@ -36,7 +36,14 @@ class Kronos extends EventEmitter {
     async createCrontab() {
         const crontab = await Crontab(this.config.cronTabPath);
         this.crontab = crontab;
+        //  set callback to receive crontab changes notifications
+        this.crontab.onDidChange(this.onCrontabChange.bind(this));
         return crontab;
+    }
+
+    async onCrontabChange() {
+        // for now reload all without checking differences from old to new
+        await this.reloadAll();
     }
 
     add(cjParamsOrJob: KNamedParams | KJob | CronJob): KJob {
@@ -119,7 +126,7 @@ class Kronos extends EventEmitter {
     }
 
     async reloadAll() {
-        if (this.count() !== 0) await this.removeAll();
+        if (this.count() !== 0) await this.removeAll(true);
         // import all modules from file
         await this._importFromDirectory();
         this.emit('loaded');
@@ -188,6 +195,6 @@ class Kronos extends EventEmitter {
             ...args
         );
     }
-};
+}
 
 export default Kronos;
