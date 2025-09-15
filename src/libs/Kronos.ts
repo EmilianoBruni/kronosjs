@@ -5,10 +5,11 @@ import figures from 'figures';
 import dayjs from 'dayjs';
 import DirectoryImport from './DirectoryImport.js';
 import Crontab from './Crontab.js';
+import { EventEmitter } from 'node:events';
 
 const className = 'Cron Job Manager';
 
-const Kronos = class {
+class Kronos extends EventEmitter {
     jobs: Map<string, KJob> = new Map();
     config: KConfig;
     crontab: Awaited<ReturnType<typeof Crontab>> | undefined;
@@ -21,6 +22,7 @@ const Kronos = class {
     }
 
     constructor(config: KConfig) {
+        super();
         this.jobs = new Map();
         this.config = config;
         if (this.config.jobsDir && !this.config.jobsDir.writeable) {
@@ -120,6 +122,7 @@ const Kronos = class {
         if (this.count() !== 0) await this.removeAll();
         // import all modules from file
         await this._importFromDirectory();
+        this.emit('loaded');
     }
 
     list() {
