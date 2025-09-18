@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 
 import { fileURLToPath } from 'node:url';
+import { writeFileSync, unlinkSync, appendFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import DirectoryImport from '../src/libs/DirectoryImport.js';
 
@@ -8,12 +9,17 @@ import DirectoryImport from '../src/libs/DirectoryImport.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const dirImport = new DirectoryImport({
+    path: `${__dirname}/jobs`,
+    log: (...args) => console.log(...args) // eslint-disable-line no-console
+});
+const modules = dirImport.modules();
+// await dirImport.init();
+
 describe('DirectoryImport', () => {
-    const dirImport = new DirectoryImport({
-        path: `${__dirname}/jobs`,
-        log: (...args) => console.log(...args) // eslint-disable-line no-console
+    after(() => {
+        dirImport.close();
     });
-    const modules = dirImport.modules();
 
     it('should import all modules from a directory', () => {
         expect(modules).to.be.an('array');
@@ -66,6 +72,38 @@ describe('DirectoryImport', () => {
                 .to.have.property('start')
                 .that.is.a('boolean')
                 .to.be.equal(true);
+        });
+    });
+
+    describe('Alter files in the directory', () => {
+        it('should emit change event when a file is added', () => {
+            const changed = new Promise(resolve =>
+                dirImport.on('change', resolve)
+            );
+            // add a new file to the directory
+            // touch test/jobs/newfile.ts
+            writeFileSync(`${__dirname}/jobs/newfile.ts`, '// new file');
+            return changed;
+        });
+
+        it('should emit change event when a file is changed', () => {
+            const altered = new Promise(resolve =>
+                dirImport.on('change', resolve)
+            );
+            // change a file in the directory
+            // echo '// changed' >> test/jobs/newfile.ts
+            appendFileSync(`${__dirname}/jobs/newfile.ts`, '// changed');
+            return altered;
+        });
+
+        it('should emit change event when a file is removed', () => {
+            const removed = new Promise(resolve =>
+                dirImport.on('change', resolve)
+            );
+            // remove a file from the directory
+            // rm test/jobs/newfile.ts
+            unlinkSync(`${__dirname}/jobs/newfile.ts`);
+            return removed;
         });
     });
 });
