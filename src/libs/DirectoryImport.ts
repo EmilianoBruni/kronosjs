@@ -19,6 +19,12 @@ class DirectoryImport extends EventEmitter {
     private _log?: (...args: unknown[]) => void;
     #watcher: FSWatcher;
 
+    public static async create(opts: DirectoryImportOptions) {
+        const dI = new DirectoryImport(opts);
+        await dI.#waitForWatcherToBeReady();
+        return dI;
+    }
+
     constructor(opts: DirectoryImportOptions) {
         super();
         this._path = opts.path;
@@ -28,17 +34,23 @@ class DirectoryImport extends EventEmitter {
             ignoreInitial: true,
             persistent: true
         });
-        this.#watcher.on('ready', () => {
-            this.#watcher
-                .on('change', () => {
-                    this.emit('change');
-                })
-                .on('add', () => {
-                    this.emit('change');
-                })
-                .on('unlink', () => {
-                    this.emit('change');
-                });
+    }
+
+    async #waitForWatcherToBeReady() {
+        return await new Promise(resolve => {
+            this.#watcher.on('ready', () => {
+                this.#watcher
+                    .on('change', () => {
+                        this.emit('change');
+                    })
+                    .on('add', () => {
+                        this.emit('change');
+                    })
+                    .on('unlink', () => {
+                        this.emit('change');
+                    });
+                resolve(true);
+            });
         });
     }
 
