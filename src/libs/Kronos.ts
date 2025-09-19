@@ -18,6 +18,7 @@ class Kronos extends EventEmitter {
     public static async create(config: KConfig) {
         const instance = new Kronos(config);
         await instance.createCrontab();
+        await instance.#createDirectoryImport();
         await instance.reloadAll();
         return instance;
     }
@@ -28,14 +29,15 @@ class Kronos extends EventEmitter {
         this.config = config;
         if (this.config.jobsDir && !this.config.jobsDir.writeable) {
             this.config.jobsDir.writeable = false;
-            this.directoryImport = new DirectoryImport({
-                path: this.config.jobsDir.base,
-                log: this._log
-            });
         }
         if (!this.config.name) {
             this.config.name = className;
         }
+    }
+
+    async onDirImportChange() {
+        this._log('Jobs directory changed, reloading jobs...');
+        await this.reloadAll();
     }
 
     async createCrontab() {
@@ -44,6 +46,20 @@ class Kronos extends EventEmitter {
         //  set callback to receive crontab changes notifications
         this.crontab.onDidChange(this.onCrontabChange.bind(this));
         return crontab;
+    }
+
+    async #createDirectoryImport() {
+        if (this.config.jobsDir && !this.config.jobsDir.writeable) {
+            this.directoryImport = await DirectoryImport.create({
+                path: this.config.jobsDir.base,
+                log: this._log
+            });
+            // watch for changes in the directory emit event to Kronos for reloading jobs
+            this.directoryImport.on(
+                'change',
+                this.onDirImportChange.bind(this)
+            );
+        }
     }
 
     async onCrontabChange() {
@@ -126,8 +142,10 @@ class Kronos extends EventEmitter {
     }
 
     async close() {
+        this._log(`${this.config.name} shutting down...`);
         this.stop();
         if (this.crontab) await this.crontab.close();
+        if (this.directoryImport) await this.directoryImport.close();
     }
 
     async reloadAll() {
