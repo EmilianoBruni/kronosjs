@@ -104,5 +104,36 @@ ${newCronTime} emptyJobWithSchema
         return asyncReload;
     });
 
-    // TODO: it('should reflect changes in the cron directory', async () => {
+    it('should reflect changes in the cron directory', async () => {
+        const cronTabPath = `${__dirname}/060-${Date.now()}.crontab`;
+        tmpFiles.push(cronTabPath);
+        const cm = await Kronos.create({
+            cronTabPath,
+            jobsDir: { base: `${__dirname}/jobs` }
+        });
+
+        const asyncReload = new Promise<void>(resolve => {
+            cm.on('loaded', () => {
+                // expect there are three jobs now
+                expect(cm.count()).to.equal(
+                    3,
+                    'There should be 3 jobs as files in the directory'
+                );
+                expect(cm.job('newfile')).to.not.equal(
+                    undefined,
+                    'Job newfile should be registered'
+                );
+
+                cm.close();
+                resolve();
+            });
+        });
+
+        // add a new file to the directory
+        // touch test/jobs/newfile.ts
+        writeFileSync(`${__dirname}/jobs/newfile.ts`, '// new file');
+        tmpFiles.push(`${__dirname}/jobs/newfile.ts`);
+
+        return asyncReload;
+    });
 });
