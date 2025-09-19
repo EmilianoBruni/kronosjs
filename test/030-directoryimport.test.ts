@@ -9,7 +9,7 @@ import DirectoryImport from '../src/libs/DirectoryImport.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const dirImport = new DirectoryImport({
+const dirImport = await DirectoryImport.create({
     path: `${__dirname}/jobs`,
     log: (...args) => console.log(...args) // eslint-disable-line no-console
 });
