@@ -1,11 +1,11 @@
-import { KCronJob } from '@/types.js';
+import { KCronJob, KLog } from '@/types.js';
 import { directoryImport } from 'directory-import';
 import { EventEmitter } from 'node:events';
 import chokidar, { type FSWatcher } from 'chokidar';
 
 type DirectoryImportOptions = {
     path: string;
-    log?: (...args: unknown[]) => void;
+    log?: KLog;
 };
 
 type ModuleInfo = {
@@ -16,7 +16,7 @@ type ModuleInfo = {
 
 class DirectoryImport extends EventEmitter {
     private _path: string = '';
-    private _log?: (...args: unknown[]) => void;
+    private log?: KLog;
     #watcher: FSWatcher;
 
     public static async create(opts: DirectoryImportOptions) {
@@ -28,7 +28,7 @@ class DirectoryImport extends EventEmitter {
     constructor(opts: DirectoryImportOptions) {
         super();
         this._path = opts.path;
-        this._log = opts.log;
+        this.log = opts.log;
         // whatch for changes in the directory emit event to Kronos for reloading jobs
         this.#watcher = chokidar.watch(this._path, {
             ignoreInitial: true,
@@ -73,7 +73,10 @@ class DirectoryImport extends EventEmitter {
                 }
             );
         } catch (error) {
-            this.log('Error while importing jobs:', (error as Error).message);
+            this.log?.error(
+                { error: (error as Error).message },
+                'Error while importing jobs'
+            );
         }
 
         return ret;
@@ -81,11 +84,6 @@ class DirectoryImport extends EventEmitter {
 
     async close() {
         await this.#watcher.close();
-    }
-
-    private log(...args: unknown[]) {
-        if (!this._log) return;
-        this._log(...args);
     }
 }
 

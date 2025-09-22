@@ -1,44 +1,10 @@
 import { expect } from 'chai';
-import sinon from 'sinon';
 import Kronos from '../src/index.js';
 import path from 'path';
 import { unlinkSync } from 'fs';
 import LoggerCreate from '../src/libs/Logger.js';
 import pino from 'pino';
 import { Transform } from 'stream';
-
-describe('CronManager log functionality', () => {
-    afterEach(() => {
-        sinon.restore();
-    });
-
-    it('logs expected messages on loop', async () => {
-        const cronTabPath = path.join(
-            process.cwd(),
-            'test',
-            `020-crontab-${Date.now()}.txt`
-        );
-        const logFake = sinon.fake();
-        const cm = await Kronos.create({
-            cronTabPath,
-            log: logFake
-        });
-
-        await cm.loop();
-
-        expect(logFake.getCall(0).lastArg.toString()).to.include(
-            `${cm.config.name} starting...`,
-            'Expected log message for starting cronjob'
-        );
-
-        expect(logFake.getCall(1).lastArg.toString()).to.include(
-            'Loading cron jobs...',
-            'Expected log message for loading cronjobs'
-        );
-        await cm.close();
-        unlinkSync(cronTabPath);
-    });
-});
 
 describe('Log instance', () => {
     it('use an abstract log if logger is missing', async () => {
@@ -79,6 +45,36 @@ describe('Log instance', () => {
         expect(logged).to.have.property('level', 30);
         expect(logged).to.have.property('msg', 'This is a test message');
         expect(logged).to.have.property('foo', 'bar');
+    });
+});
+
+describe('CronManager log functionality', () => {
+    it('logs expected messages on loop', async () => {
+        const stream = jsonStream();
+        const cronTabPath = path.join(
+            process.cwd(),
+            'test',
+            `020-crontab-${Date.now()}.txt`
+        );
+        const cm = await Kronos.create({
+            cronTabPath,
+            logger: { level: 'info', stream }
+        });
+
+        await cm.loop();
+        let logged = stream.lastJSON();
+        expect(logged).to.have.property('level', 'info');
+        expect(logged).to.have.property('msg', 'Cron started');
+
+        await cm.close();
+        logged = stream.lastJSON();
+        expect(logged).to.have.property('level', 'info');
+        expect(logged).to.have.property(
+            'msg',
+            `${cm.config.name} shutting down...`
+        );
+
+        unlinkSync(cronTabPath);
     });
 });
 

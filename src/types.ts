@@ -1,7 +1,11 @@
 import { CronJob, CronJobParams } from 'cron';
 import { Type, type Static } from '@sinclair/typebox';
+import type { Logger, LoggerOptions } from 'pino';
 
-export type KLog = (message?: any, ...optionalParams: any[]) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
+export type KLog = Logger;
+export type KLogOptions = LoggerOptions & {
+    stream?: { write: (msg: string) => void };
+};
 
 export type KBaseParams = CronJobParams;
 export type KBaseJob = CronJob;
@@ -31,8 +35,9 @@ export type KConfig = {
         base: string;
         writeable?: boolean;
     };
-    log?: KLog;
     name?: string;
+    logger?: KLogOptions;
+    loggerInstance?: KLog;
 };
 
 /**

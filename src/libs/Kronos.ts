@@ -1,10 +1,8 @@
-import type { KNamedParams, KJob, KConfig } from '../types.js';
+import type { KNamedParams, KJob, KConfig, KLog } from '../types.js';
 import { CronJob } from 'cron';
-import ansis from 'ansis';
-import figures from 'figures';
-import dayjs from 'dayjs';
 import DirectoryImport from './DirectoryImport.js';
 import Crontab from './Crontab.js';
+import LoggerCreate from './Logger.js';
 import { EventEmitter } from 'node:events';
 
 const className = 'Cron Job Manager';
@@ -14,6 +12,7 @@ class Kronos extends EventEmitter {
     config: KConfig;
     crontab: Awaited<ReturnType<typeof Crontab>> | undefined;
     directoryImport: DirectoryImport | undefined;
+    log: KLog;
 
     public static async create(config: KConfig) {
         const instance = new Kronos(config);
@@ -33,10 +32,14 @@ class Kronos extends EventEmitter {
         if (!this.config.name) {
             this.config.name = className;
         }
+        this.log = LoggerCreate({
+            logger: config.logger,
+            loggerInstance: config.loggerInstance
+        }) as KLog;
     }
 
     async onDirImportChange() {
-        this._log('Jobs directory changed, reloading jobs...');
+        this.log.debug('Jobs directory changed, reloading jobs...');
         await this.reloadAll();
     }
 
@@ -52,7 +55,7 @@ class Kronos extends EventEmitter {
         if (this.config.jobsDir && !this.config.jobsDir.writeable) {
             this.directoryImport = await DirectoryImport.create({
                 path: this.config.jobsDir.base,
-                log: this._log
+                log: this.log
             });
             // watch for changes in the directory emit event to Kronos for reloading jobs
             this.directoryImport.on(
@@ -142,7 +145,7 @@ class Kronos extends EventEmitter {
     }
 
     async close() {
-        this._log(`${this.config.name} shutting down...`);
+        this.log.info(`${this.config.name} shutting down...`);
         this.stop();
         if (this.crontab) await this.crontab.close();
         if (this.directoryImport) await this.directoryImport.close();
@@ -188,36 +191,33 @@ class Kronos extends EventEmitter {
 
     async loop() {
         // main function loop
-        this._log(ansis.greenBright(`${this.config.name} starting...`));
-        this._log(
-            ansis.blueBright(figures.lineDownRight),
-            'Loading cron jobs...'
-        );
-        this._log('Cron started', ansis.green(figures.tick));
+        this.log.info(`${this.config.name} starting...`);
+        this.log.debug('Loading cron jobs...');
+        this.log.info('Cron started');
     }
 
-    // first type of log... log raw to log function
-    _log_raw(...args: unknown[]) {
-        if (!this.config.log) return;
-        const log = this.config.log;
-        log(...args);
-    }
+    // // first type of log... log raw to log function
+    // _log_raw(...args: unknown[]) {
+    //     if (!this.config.log) return;
+    //     const log = this.config.log;
+    //     log(...args);
+    // }
 
-    // second type of log.. _log_raw_with timestamp
-    _log(...args: unknown[]) {
-        const timestamp = dayjs().format();
-        this._log_raw(`[${ansis.magentaBright(timestamp)}]`, ...args);
-    }
+    // // second type of log.. _log_raw_with timestamp
+    // _log(...args: unknown[]) {
+    //     const timestamp = dayjs().format();
+    //     this._log_raw(`[${ansis.magentaBright(timestamp)}]`, ...args);
+    // }
 
-    // third type of log... _log with job name usually for start/stop
-    _log_cron(jobName: string, ...args: unknown[]) {
-        this._log(
-            ansis.yellowBright(
-                `${jobName} ${figures.lineBold}${figures.triangleRight}`
-            ),
-            ...args
-        );
-    }
+    // // third type of log... _log with job name usually for start/stop
+    // _log_cron(jobName: string, ...args: unknown[]) {
+    //     this._log(
+    //         ansis.yellowBright(
+    //             `${jobName} ${figures.lineBold}${figures.triangleRight}`
+    //         ),
+    //         ...args
+    //     );
+    // }
 }
 
 export default Kronos;
