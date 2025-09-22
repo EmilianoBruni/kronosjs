@@ -39,7 +39,8 @@
     "cron": "^4.3.3",
     "dayjs": "^1.11.13",
     "directory-import": "^3.3.2",
-    "figures": "^6.1.0"
+    "figures": "^6.1.0",
+    "pino": "^9.11.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
