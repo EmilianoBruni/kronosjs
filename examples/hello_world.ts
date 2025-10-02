@@ -1,16 +1,16 @@
 import Kronos from '@/index.js';
 
 const cm = await Kronos.create({
-    logger: { level: 'info' }
+    logger: { level: 'info' },
+    name: 'Hello World example'
 });
 
 cm.add({
     name: 'hello_world',
     cronTime: '* * * * * *',
-    onTick: function() {
-        this.log && this.log.info('Hello, World!');
-        this.stop();
-        cm.close();
+    onTick: function () {
+        if (this.log) this.log.info('Hello, World!');
+        cm.close(); // stop all jobs too
     },
-    start: true,
+    start: true
 });
