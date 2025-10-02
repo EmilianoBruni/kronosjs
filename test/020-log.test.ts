@@ -61,7 +61,6 @@ describe('CronManager log functionality', () => {
             logger: { level: 'info', stream }
         });
 
-        await cm.loop();
         let logged = stream.lastJSON();
         expect(logged).to.have.property('level', 'info');
         expect(logged).to.have.property('msg', 'Cron started');
