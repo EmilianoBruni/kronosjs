@@ -35,7 +35,7 @@ const LoggerCreate = (options: LoggerOptions) => {
                 }
             };
         }
-        return pino(options.logger, options.logger.stream);
+        return pino(logger, logger.stream);
     }
     return nullLogger;
 };
