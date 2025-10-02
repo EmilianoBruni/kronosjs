@@ -4,6 +4,7 @@ import DirectoryImport from './DirectoryImport.js';
 import Crontab from './Crontab.js';
 import LoggerCreate from './Logger.js';
 import { EventEmitter } from 'node:events';
+import Fastify from 'fastify';
 
 const className = 'Cron Job Manager';
 
@@ -13,19 +14,23 @@ class Kronos extends EventEmitter {
     crontab: Awaited<ReturnType<typeof Crontab>> | undefined;
     directoryImport: DirectoryImport | undefined;
     log: KLog;
+    httpServer: ReturnType<typeof Fastify> | undefined;
 
     public static async create(config: KConfig) {
         const instance = new Kronos(config);
+        instance.log.info(`${instance.config.name} starting...`);
         await instance.createCrontab();
         await instance.#createDirectoryImport();
+        instance.log.debug('Loading cron jobs...');
         await instance.reloadAll();
+        instance.log.info('Cron started');
         return instance;
     }
 
     constructor(config: KConfig) {
         super();
         this.jobs = new Map();
-        this.config = config;
+        this.config = config || {};
         if (this.config.jobsDir && !this.config.jobsDir.writeable) {
             this.config.jobsDir.writeable = false;
         }
@@ -33,9 +38,12 @@ class Kronos extends EventEmitter {
             this.config.name = className;
         }
         this.log = LoggerCreate({
-            logger: config.logger,
-            loggerInstance: config.loggerInstance
+            logger: this.config.logger,
+            loggerInstance: this.config.loggerInstance
         }) as KLog;
+        if (this.config.httpServer) {
+            this.#initHttpServer();
+        }
     }
 
     async onDirImportChange() {
@@ -70,10 +78,13 @@ class Kronos extends EventEmitter {
         await this.reloadAll();
     }
 
-    add(cjParamsOrJob: KNamedParams | KJob | CronJob): KJob {
+    add(cjParamsOrJob: KNamedParams<null, null> | KJob | CronJob): KJob {
         if (!cjParamsOrJob.name) {
             // TODO: consider better name than a generate a random one
             cjParamsOrJob.name = `cron-job-${Math.random().toString(36).substring(2, 15)}`;
+        }
+        if (!(cjParamsOrJob instanceof CronJob) && !cjParamsOrJob.log) {
+            cjParamsOrJob.log = this.log;
         }
         // search job in crontab
         if (this.crontab) {
@@ -91,11 +102,13 @@ class Kronos extends EventEmitter {
 
         if (cjParamsOrJob instanceof CronJob) {
             const job = cjParamsOrJob as KJob;
+            job.log = this.log;
             this.jobs.set(cjParamsOrJob.name, job);
             return job;
         }
 
         const job = CronJob.from(cjParamsOrJob) as KJob;
+        job.log = this.log;
         this.jobs.set(cjParamsOrJob.name, job);
         return job;
     }
@@ -179,7 +192,7 @@ class Kronos extends EventEmitter {
             const job = moduleData.default;
             const configSrc = moduleData.config ? moduleData.config : undefined;
             const config = configSrc ? await configSrc() : undefined;
-            const jobCfg: KNamedParams = {
+            const jobCfg: KNamedParams<null, null> = {
                 cronTime: config?.schedule ? config.schedule : '0 * * * * *',
                 start: config?.start !== undefined ? config.start : false,
                 name: config?.name ? config.name : mod.moduleName,
@@ -189,12 +202,12 @@ class Kronos extends EventEmitter {
         }
     }
 
-    async loop() {
-        // main function loop
-        this.log.info(`${this.config.name} starting...`);
-        this.log.debug('Loading cron jobs...');
-        this.log.info('Cron started');
-    }
+    // async loop() {
+    //     // main function loop
+    //     this.log.debug('Loading cron jobs...');
+    //     await this.reloadAll();
+    //     this.log.info('Cron started');
+    // }
 
     // // first type of log... log raw to log function
     // _log_raw(...args: unknown[]) {
@@ -218,6 +231,12 @@ class Kronos extends EventEmitter {
     //         ...args
     //     );
     // }
+
+    #initHttpServer() {
+        this.httpServer = Fastify({
+            logger: this.log
+        });
+    }
 }
 
 export default Kronos;
