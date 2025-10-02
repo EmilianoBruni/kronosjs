@@ -24,6 +24,9 @@ class Kronos extends EventEmitter {
         instance.log.debug('Loading cron jobs...');
         await instance.reloadAll();
         instance.log.info('Cron started');
+        if (instance.httpServer) {
+            await instance.#createHttpServer();
+        }
         return instance;
     }
 
@@ -167,6 +170,7 @@ class Kronos extends EventEmitter {
         this.stop();
         if (this.crontab) await this.crontab.close();
         if (this.directoryImport) await this.directoryImport.close();
+        if (this.httpServer) await this.httpServer.close();
     }
 
     async reloadAll() {
@@ -238,9 +242,25 @@ class Kronos extends EventEmitter {
     // }
 
     #initHttpServer() {
-        this.httpServer = Fastify({
-            logger: this.log
-        });
+        let { logger } = this.config;
+        if (logger) {
+            if (logger === true) logger = { level: 'info' };
+            if (!logger.formatters || !logger.formatters.level) {
+                // if not defined, level will return level label instead of number
+                // to be compatible with Loki
+                logger.formatters = {
+                    level(label: string) {
+                        return { level: label };
+                    }
+                };
+            }
+        }
+        this.httpServer = Fastify({ logger });
+    }
+
+    async #createHttpServer() {
+        if (!this.httpServer || !this.config.httpServer) return;
+        await this.httpServer.listen({ port: this.config.httpServer.port });
     }
 }
 
