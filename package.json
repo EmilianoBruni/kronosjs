@@ -9,7 +9,7 @@
     "buildcjs": "rollup ./dist/index.js --file ./dist/index.cjs --format cjs",
     "build": "pnpm clean && pnpm tsc && pnpm tsc-alias",
     "clean": "rimraf ./dist .tap",
-    "lint": "eslint \"src/**/*.[jt]s?(x)\" \"test/**/*.?(c)[jt]s\"",
+    "lint": "eslint \"src/**/*.[jt]s?(x)\" \"test/**/*.?(c)[jt]s\" \"examples/**/*.?(c)[jt]s\"",
     "lint:fix": "pnpm lint --fix",
     "prepublishOnly": "pnpm lint:fix && pnpm build && pnpm buildcjs && pnpm test",
     "test:ci": "pnpm prepublishOnly",
