@@ -38,6 +38,7 @@
     "cron": "^4.3.3",
     "dayjs": "^1.11.13",
     "directory-import": "^3.3.2",
+    "fastify": "^5.6.1",
     "pino": "^9.11.0"
   },
   "devDependencies": {
