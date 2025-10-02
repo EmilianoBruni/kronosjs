@@ -211,36 +211,6 @@ class Kronos extends EventEmitter {
         }
     }
 
-    // async loop() {
-    //     // main function loop
-    //     this.log.debug('Loading cron jobs...');
-    //     await this.reloadAll();
-    //     this.log.info('Cron started');
-    // }
-
-    // // first type of log... log raw to log function
-    // _log_raw(...args: unknown[]) {
-    //     if (!this.config.log) return;
-    //     const log = this.config.log;
-    //     log(...args);
-    // }
-
-    // // second type of log.. _log_raw_with timestamp
-    // _log(...args: unknown[]) {
-    //     const timestamp = dayjs().format();
-    //     this._log_raw(`[${ansis.magentaBright(timestamp)}]`, ...args);
-    // }
-
-    // // third type of log... _log with job name usually for start/stop
-    // _log_cron(jobName: string, ...args: unknown[]) {
-    //     this._log(
-    //         ansis.yellowBright(
-    //             `${jobName} ${figures.lineBold}${figures.triangleRight}`
-    //         ),
-    //         ...args
-    //     );
-    // }
-
     #initHttpServer() {
         let { logger } = this.config;
         if (logger) {
