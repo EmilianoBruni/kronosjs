@@ -7,12 +7,32 @@ export type KLogOptions = LoggerOptions & {
     stream?: { write: (msg: string) => void };
 };
 
+export type CronContext<C> = C extends null ? KBaseJob : NonNullable<C>;
+export type CronCallback<C, WithOnCompleteBool extends boolean = false> = (
+    this: CronContext<C>,
+    onComplete: WithOnCompleteBool extends true ? CronOnCompleteCallback : never
+) => void | Promise<void>;
+export type CronOnCompleteCallback = () => void | Promise<void>;
+
+export type CronCommand<
+    C,
+    WithOnCompleteBool extends boolean = false
+> = CronCallback<C, WithOnCompleteBool>;
+
+export type CronOnCompleteCommand = CronOnCompleteCallback;
+
+export type WithOnComplete<OC> = OC extends null ? false : true;
+
 export type KBaseParams = CronJobParams;
-export type KBaseJob = CronJob;
+export type KBaseJob = CronJob & { log?: KLog };
 
-export type KNamedParams = KBaseParams & { name: string };
+export type KNamedParams<OC, C> = KBaseParams & {
+    name: string;
+    log?: KLog;
+    onTick: CronCommand<C, WithOnComplete<OC>>;
+};
 
-export type KParams = KNamedParams & {
+export type KParams<OC, C> = KNamedParams<OC, C> & {
     log?: KLog;
 };
 
@@ -38,6 +58,11 @@ export type KConfig = {
     name?: string;
     logger?: KLogOptions;
     loggerInstance?: KLog;
+    httpServer?: {
+        port: number;
+        host?: string;
+        path?: string;
+    };
 };
 
 /**
