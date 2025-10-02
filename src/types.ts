@@ -56,7 +56,7 @@ export type KConfig = {
         writeable?: boolean;
     };
     name?: string;
-    logger?: KLogOptions;
+    logger?: boolean | KLogOptions;
     loggerInstance?: KLog;
     httpServer?: {
         port: number;

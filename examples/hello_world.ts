@@ -1,7 +1,7 @@
 import Kronos from '@/index.js';
 
 const cm = await Kronos.create({
-    logger: { level: 'info' },
+    logger: true,
     name: 'Hello World example'
 });
 

@@ -34,11 +34,15 @@ class Kronos extends EventEmitter {
         if (this.config.jobsDir && !this.config.jobsDir.writeable) {
             this.config.jobsDir.writeable = false;
         }
-        if (!this.config.name) {
-            this.config.name = className;
-        }
+        if (!this.config.name) this.config.name = className;
+        const logger =
+            this.config.logger && this.config.logger === true
+                ? { level: 'info' }
+                : this.config.logger === false
+                  ? undefined
+                  : this.config.logger;
         this.log = LoggerCreate({
-            logger: this.config.logger,
+            logger: logger,
             loggerInstance: this.config.loggerInstance
         }) as KLog;
         if (this.config.httpServer) {
