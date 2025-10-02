@@ -52,6 +52,7 @@ class Kronos extends EventEmitter {
     }
 
     async createCrontab() {
+        if (!this.config.cronTabPath) return;
         const crontab = await Crontab(this.config.cronTabPath);
         this.crontab = crontab;
         //  set callback to receive crontab changes notifications
