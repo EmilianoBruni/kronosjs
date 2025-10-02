@@ -4,7 +4,7 @@ import DirectoryImport from './DirectoryImport.js';
 import Crontab from './Crontab.js';
 import LoggerCreate from './Logger.js';
 import { EventEmitter } from 'node:events';
-import Fastify from 'fastify';
+import HttpServer from './HttpServer.js';
 
 const className = 'Cron Job Manager';
 
@@ -14,7 +14,7 @@ class Kronos extends EventEmitter {
     crontab: Awaited<ReturnType<typeof Crontab>> | undefined;
     directoryImport: DirectoryImport | undefined;
     log: KLog;
-    httpServer: ReturnType<typeof Fastify> | undefined;
+    httpServer: HttpServer | undefined;
 
     public static async create(config: KConfig) {
         const instance = new Kronos(config);
@@ -25,7 +25,7 @@ class Kronos extends EventEmitter {
         await instance.reloadAll();
         instance.log.info('Cron started');
         if (instance.httpServer) {
-            await instance.#createHttpServer();
+            await instance.httpServer.start();
         }
         return instance;
     }
@@ -49,7 +49,11 @@ class Kronos extends EventEmitter {
             loggerInstance: this.config.loggerInstance
         }) as KLog;
         if (this.config.httpServer) {
-            this.#initHttpServer();
+            this.httpServer = new HttpServer(
+                this.config.logger,
+                this.config.httpServer.port,
+                this.config.httpServer.host
+            );
         }
     }
 
@@ -170,7 +174,7 @@ class Kronos extends EventEmitter {
         this.stop();
         if (this.crontab) await this.crontab.close();
         if (this.directoryImport) await this.directoryImport.close();
-        if (this.httpServer) await this.httpServer.close();
+        if (this.httpServer) await this.httpServer.stop();
     }
 
     async reloadAll() {
@@ -211,27 +215,13 @@ class Kronos extends EventEmitter {
         }
     }
 
-    #initHttpServer() {
-        let { logger } = this.config;
-        if (logger) {
-            if (logger === true) logger = { level: 'info' };
-            if (!logger.formatters || !logger.formatters.level) {
-                // if not defined, level will return level label instead of number
-                // to be compatible with Loki
-                logger.formatters = {
-                    level(label: string) {
-                        return { level: label };
-                    }
-                };
-            }
-        }
-        this.httpServer = Fastify({ logger });
-    }
-
-    async #createHttpServer() {
-        if (!this.httpServer || !this.config.httpServer) return;
-        await this.httpServer.listen({ port: this.config.httpServer.port });
-    }
+    // async #createHttpServer() {
+    //     if (!this.httpServer || !this.config.httpServer) return;
+    //     await routesDeclaration(this.httpServer);
+    //     const port = this.config.httpServer.port || 3000;
+    //     const host = this.config.httpServer.host || 'localhost';
+    //     await startHttpServer(this.httpServer, port, host);
 }
+// }
 
 export default Kronos;
