@@ -11,12 +11,18 @@ cm.add({
     cronTime: '*/2 * * * * *',
     onTick: function () {
         if (this.log) this.log.info('Hello, World!');
-        cm.close(); // stop all jobs too
+        // cm.close(); // stop all jobs too
     },
     start: true
 });
 
-cm.httpServer?.getFastifyInstance().inject(
+const fastify = cm.httpServer?.getFastifyInstance();
+
+if (!fastify) {
+    throw new Error('Fastify instance not available');
+}
+
+fastify.inject(
     {
         method: 'GET',
         url: '/health'
@@ -31,3 +37,21 @@ cm.httpServer?.getFastifyInstance().inject(
         ); // should print: { status: 'ok' }
     }
 );
+
+fastify.inject(
+    {
+        method: 'GET',
+        url: '/api/jobs'
+    },
+    (err, res) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        process.stdout.write(
+            'Response: ' + JSON.stringify(res?.payload) + '\n'
+        ); // should print: { total: 1, items: [ 'hello_world' ] }
+    }
+);
+
+await cm.close();
