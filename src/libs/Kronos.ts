@@ -50,6 +50,7 @@ class Kronos extends EventEmitter {
         }) as KLog;
         if (this.config.httpServer) {
             this.httpServer = new HttpServer(
+                this,
                 this.config.logger,
                 this.config.httpServer.port,
                 this.config.httpServer.host
@@ -95,9 +96,6 @@ class Kronos extends EventEmitter {
             // TODO: consider better name than a generate a random one
             cjParamsOrJob.name = `cron-job-${Math.random().toString(36).substring(2, 15)}`;
         }
-        if (!(cjParamsOrJob instanceof CronJob) && !cjParamsOrJob.log) {
-            cjParamsOrJob.log = this.log;
-        }
         // search job in crontab
         if (this.crontab) {
             const cronTime = this.crontab.get(cjParamsOrJob.name);
@@ -114,13 +112,13 @@ class Kronos extends EventEmitter {
 
         if (cjParamsOrJob instanceof CronJob) {
             const job = cjParamsOrJob as KJob;
-            job.log = this.log;
+            job.log = this.log.child({ jobId: job.name });
             this.jobs.set(cjParamsOrJob.name, job);
             return job;
         }
 
         const job = CronJob.from(cjParamsOrJob) as KJob;
-        job.log = this.log;
+        job.log = this.log.child({ jobId: job.name });
         this.jobs.set(cjParamsOrJob.name, job);
         return job;
     }
@@ -214,14 +212,6 @@ class Kronos extends EventEmitter {
             this.add(jobCfg);
         }
     }
-
-    // async #createHttpServer() {
-    //     if (!this.httpServer || !this.config.httpServer) return;
-    //     await routesDeclaration(this.httpServer);
-    //     const port = this.config.httpServer.port || 3000;
-    //     const host = this.config.httpServer.host || 'localhost';
-    //     await startHttpServer(this.httpServer, port, host);
 }
-// }
 
 export default Kronos;
