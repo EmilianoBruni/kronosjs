@@ -89,6 +89,11 @@ export const KCronConfigSchema = Type.Record(
 type ValueOf<T> = T[keyof T];
 export type KCronConfig = ValueOf<Static<typeof KCronConfigSchema>>;
 
+export type KCronJobConfig =
+    | (() => KCronConfig)
+    | (() => Promise<KCronConfig>)
+    | KCronConfig;
+
 /**
  * Represents the structure of a cron job module.
  *
@@ -98,6 +103,6 @@ export type KCronConfig = ValueOf<Static<typeof KCronConfigSchema>>;
  */
 export type KCronJob = {
     default: () => Promise<void>;
-    config?: () => Promise<KCronConfig>;
+    config?: KCronJobConfig;
     name?: string;
 };

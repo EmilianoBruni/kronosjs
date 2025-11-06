@@ -1,4 +1,10 @@
-import type { KNamedParams, KJob, KConfig, KLog } from '../types.js';
+import type {
+    KNamedParams,
+    KJob,
+    KConfig,
+    KLog,
+    KCronJobConfig
+} from '../types.js';
 import { CronJob } from 'cron';
 import DirectoryImport from './DirectoryImport.js';
 import Crontab from './Crontab.js';
@@ -94,7 +100,9 @@ class Kronos extends EventEmitter {
     add(cjParamsOrJob: KNamedParams<null, null> | KJob | CronJob): KJob {
         if (!cjParamsOrJob.name) {
             // TODO: consider better name than a generate a random one
-            cjParamsOrJob.name = `cron-job-${Math.random().toString(36).substring(2, 15)}`;
+            cjParamsOrJob.name = `cron-job-${Math.random()
+                .toString(36)
+                .substring(2, 15)}`;
         }
         // search job in crontab
         if (this.crontab) {
@@ -202,7 +210,9 @@ class Kronos extends EventEmitter {
             const moduleData = mod.moduleData;
             const job = moduleData.default;
             const configSrc = moduleData.config ? moduleData.config : undefined;
-            const config = configSrc ? await configSrc() : undefined;
+            const config = configSrc
+                ? await decodeCronJobConfig(configSrc)
+                : undefined;
             const jobCfg: KNamedParams<null, null> = {
                 cronTime: config?.schedule ? config.schedule : '0 * * * * *',
                 start: config?.start !== undefined ? config.start : false,
@@ -213,5 +223,16 @@ class Kronos extends EventEmitter {
         }
     }
 }
+
+const decodeCronJobConfig = async (configSrc: KCronJobConfig) => {
+    if (typeof configSrc === 'function') {
+        if (configSrc instanceof Promise) {
+            return await configSrc();
+        } else {
+            return configSrc();
+        }
+    }
+    return configSrc;
+};
 
 export default Kronos;
