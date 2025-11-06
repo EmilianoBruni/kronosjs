@@ -1,4 +1,4 @@
-# � kronosjs - Cron Job Manager for Node.js
+# kronosjs - Cron Job Manager for Node.js
 
 _Manage, monitor, and control scheduled cron jobs with TypeScript support, hot-reloading, terminal integration (TODO) and a REST API_
 
@@ -11,36 +11,32 @@ _Manage, monitor, and control scheduled cron jobs with TypeScript support, hot-r
 
 ## ✨ Features
 
+### General
+
 -   🧱 **Built on cron**: Uses the battle-tested [cron](https://www.npmjs.com/package/cron) package
 -   📁 **Directory-based Jobs**: Load jobs automatically from a directory
 -   🔄 **Hot Reload**: Auto-reload job definitions when files change
 -   📝 **Crontab Support**: Persist job schedules in a crontab file
 -   🖥️ **REST API**: Built-in Fastify HTTP server for job management
--   🛠️ CLI/Terminal UI: Manual runs and live status monitoring (TODO)
+-   🛠️ **CLI/Terminal UI**: Manual runs and live status monitoring (TODO)
 -   🪵 **Structured Logging**: Powered by [Pino](https://www.npmjs.com/package/pino) with per-job context
 -   ⚡ **TypeScript-first**: Full TypeScript support with comprehensive types
 -   🎯 **Timezone Support**: Schedule jobs in any timezone
 
----
-
-## 🖥️ Web UI
+### 🖥️ Web UI
 
 -   **Dashboard**: Status, next run, last run, duration, failures
 -   **Job Detail**: Cron expression, timezone, recent runs, logs
 -   **Actions**: Create, start, stop, delete, enable/disable
 -   **Logs**: Stream and filter by time, text, status
 
----
-
-## 🔄 Hot Reloading & 🧩 Dynamic Jobs
+### 🔄 Hot Reloading & 🧩 Dynamic Jobs
 
 -   Load/unload job definitions at runtime without restarting the server.
 -   Watch your job definition files and automatically apply changes.
 -   Trigger on-demand runs via API or CLI while the scheduler is active.
 
----
-
-## ⌨️ CLI & Terminal Integration
+### ⌨️ CLI & Terminal Integration
 
 Open the interactive terminal UI by running your project’s CLI entrypoint. Then use:
 
@@ -51,7 +47,17 @@ Open the interactive terminal UI by running your project’s CLI entrypoint. The
 
 Great for quick manual runs, smoke tests, and monitoring during development.
 
----
+### 💡 Use Cases
+
+-   Operational task scheduling and visibility
+-   Admin-friendly controls for background workers
+-   CI-triggered job runs and monitoring
+-   Rapid iteration with hot-reloaded job definitions
+
+### 🔐 Security
+
+-   API key or JWT auth for UI and API _(recommended in production)_
+-   CORS and rate limiting toggles
 
 ## 📦 Installation
 
@@ -63,30 +69,12 @@ pnpm add kronosjs
 yarn add kronosjs
 ```
 
----
-
 ## 🚀 Quick Start
 
 1. **Install package** and register your handlers
 2. **Launch the server** and open the UI at `/` (API under `/api`)
 3. **Use the CLI** to run jobs and monitor status from the terminal
 4. **Configure storage and auth** via ENV or config file
-
----
-
-## 💡 Use Cases
-
--   Operational task scheduling and visibility
--   Admin-friendly controls for background workers
--   CI-triggered job runs and monitoring
--   Rapid iteration with hot-reloaded job definitions
-
----
-
-## 🔐 Security
-
--   API key or JWT auth for UI and API _(recommended in production)_
--   CORS and rate limiting toggles
 
 ### Basic Example
 
@@ -191,19 +179,17 @@ const cm = await Kronos.create({
 });
 ```
 
----
-
 ## 🔌 REST API Endpoints
 
 When you enable the HTTP server, the following endpoints are available:
 
--   `GET /api/crons` — List all jobs
--   `POST /api/crons` — Create a job
--   `GET /api/crons/:id` — Get job details
--   `POST /api/crons/:id/start` — Start a job
--   `POST /api/crons/:id/stop` — Stop a job
--   `DELETE /api/crons/:id` — Delete a job
--   `GET /api/crons/:id/logs?status=&q=&from=&to=` — Paginated logs
+-   `GET /api/jobs` — List all jobs
+-   `POST /api/jobs` — Create a job
+-   `GET /api/jobs/:id` — Get job details
+-   `POST /api/jobs/:id/start` — Start a job
+-   `POST /api/jobs/:id/stop` — Stop a job
+-   `DELETE /api/jobs/:id` — Delete a job
+-   `GET /api/jobs/:id/logs?status=&q=&from=&to=` — Paginated logs
 
 ### Health Check
 
@@ -246,8 +232,6 @@ When you enable the HTTP server, the following endpoints are available:
     ```json
     { "result": true, "status": "Job removed" }
     ```
-
----
 
 ## 📖 API Reference
 
@@ -398,8 +382,6 @@ const cm = await Kronos.create({
 
 Any changes to `.ts` or `.js` files in the jobs directory will automatically reload all jobs.
 
----
-
 ## 📝 Crontab Persistence
 
 Save job schedules to a crontab file:
@@ -420,8 +402,6 @@ The crontab file format:
 
 Changes to the crontab file are automatically detected and applied. Add files to jobDir, change configuration via API or via terminal are applied to crontab file.
 
----
-
 ## 📊 Logging
 
 Kronos uses [Pino](https://www.npmjs.com/package/pino) for structured logging. Each job gets its own logger context with the `jobId` field.
@@ -433,8 +413,6 @@ function run(this: KJob) {
     this.log?.error('An error occurred');
 }
 ```
-
----
 
 ## 🌐 HTTP Server
 
@@ -455,8 +433,6 @@ if (fastify) {
 }
 ```
 
----
-
 ## 📚 Examples
 
 Check the [examples](./examples) directory for more use cases:
@@ -465,8 +441,6 @@ Check the [examples](./examples) directory for more use cases:
 -   [`hello_world_console_log.ts`](./examples/hello_world_console_log.ts) - Custom logger output
 -   [`hello_world_from_folder.ts`](./examples/hello_world_from_folder.ts) - Load jobs from directory
 -   [`hello_world_http.ts`](./examples/hello_world_http.ts) - HTTP server integration
-
----
 
 ## 🧪 Testing
 
@@ -484,19 +458,11 @@ pnpm lint
 pnpm build
 ```
 
----
-
 ## 🔗 Links
 
 -   **Report Bugs**: [GitHub Issues](https://github.com/EmilianoBruni/kronosjs/issues)
 -   **Feature Requests**: [GitHub Issues](https://github.com/EmilianoBruni/kronosjs/issues)
 -   **Repository**: [GitHub](https://github.com/EmilianoBruni/kronosjs)
-
-## Links
-
--   **Report Bugs**: [GitHub Issues](https://github.com/EmilianoBruni/kronosjs/issues)
--   **Feature Requests**: [GitHub Issues](https://github.com/EmilianoBruni/kronosjs/issues)
--   **Help and Support**: [GitHub Discussions](https://github.com/EmilianoBruni/kronosjs)
 
 ## Contributing
 
