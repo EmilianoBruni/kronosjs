@@ -2,12 +2,11 @@
 
 _Manage, monitor, and control scheduled cron jobs with TypeScript support, hot-reloading, terminal integration (TODO) and a REST API_
 
-[![npm package](https://img.shields.io/npm/v/kronosjs.svg)](http://npmjs.org/package/kronosjs)
+[![npm package](https://img.shields.io/npm/v/@ebruni/kronosjs.svg)](http://npmjs.org/package/@ebruni/kronosjs)
 [![Build workflow](https://github.com/EmilianoBruni/kronosjs/actions/workflows/build.yml/badge.svg)](https://github.com/EmilianoBruni/kronosjs/actions/workflows/build.yml)
-[![Coverage Status](https://coveralls.io/repos/github/EmilianoBruni/kronosjs/badge.svg?branch=master)](https://coveralls.io/github/EmilianoBruni/kronosjs?branch=master)
 ![Last Commit](https://img.shields.io/github/last-commit/EmilianoBruni/kronosjs)
 [![Dependencies](https://img.shields.io/librariesio/github/EmilianoBruni/kronosjs)](https://libraries.io/npm/kronosjs)
-![Downloads](https://img.shields.io/npm/dt/kronosjs)
+![Downloads](https://img.shields.io/npm/dt/@ebruni/kronosjs)
 
 ## ✨ Features
 
@@ -62,11 +61,11 @@ Great for quick manual runs, smoke tests, and monitoring during development.
 ## 📦 Installation
 
 ```bash
-npm install kronosjs
+npm install @ebruni/kronosjs
 # or
-pnpm add kronosjs
+pnpm add @ebruni/kronosjs
 # or
-yarn add kronosjs
+yarn add @ebruni/kronosjs
 ```
 
 ## 🚀 Quick Start
@@ -79,7 +78,7 @@ yarn add kronosjs
 ### Basic Example
 
 ```typescript
-import Kronos from 'kronosjs';
+import Kronos from '@ebruni/kronosjs';
 
 const cm = await Kronos.create({
     logger: true,
@@ -101,7 +100,7 @@ cm.add({
 Create a job file `jobs/hello_world.job.ts`:
 
 ```typescript
-import type { KCronConfig, KJob } from 'kronosjs';
+import type { KCronConfig, KJob } from '@ebruni/kronosjs';
 
 function run(this: KJob) {
     if (this.log) this.log.info('Hello, World!');
@@ -120,7 +119,7 @@ export { config };
 Then load it:
 
 ```typescript
-import Kronos from 'kronosjs';
+import Kronos from '@ebruni/kronosjs';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -138,7 +137,7 @@ await cm.start();
 ### With HTTP Server
 
 ```typescript
-import Kronos from 'kronosjs';
+import Kronos from '@ebruni/kronosjs';
 
 const cm = await Kronos.create({
     logger: true,
@@ -161,7 +160,7 @@ cm.add({
 ### Custom Logger Output
 
 ```typescript
-import Kronos from 'kronosjs';
+import Kronos from '@ebruni/kronosjs';
 
 const cm = await Kronos.create({
     logger: {
