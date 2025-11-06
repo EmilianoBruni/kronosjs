@@ -1,5 +1,5 @@
 {
-    "name": "kronosjs",
+    "name": "@ebruni/kronosjs",
     "version": "0.1.0",
     "description": "Manage, monitor, and control scheduled cron jobs with terminal integration and a simple REST API",
     "main": "dist/index.js",
