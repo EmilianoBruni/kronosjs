@@ -1,83 +1,83 @@
 {
-  "name": "kronosjs",
-  "version": "0.1.0",
-  "description": "Manage, monitor, and control scheduled cron jobs with terminal integration and a simple REST API",
-  "main": "dist/index.js",
-  "scripts": {
-    "test": "mocha test/**/*.test.ts",
-    "test:coverage": "nyc --reporter=text mocha test/**/*.test.ts",
-    "buildcjs": "rollup ./dist/index.js --file ./dist/index.cjs --format cjs",
-    "build": "pnpm clean && pnpm tsc && pnpm tsc-alias",
-    "clean": "rimraf ./dist .tap",
-    "lint": "eslint \"src/**/*.[jt]s?(x)\" \"test/**/*.?(c)[jt]s\" \"examples/**/*.?(c)[jt]s\"",
-    "lint:fix": "pnpm lint --fix",
-    "prepublishOnly": "pnpm lint:fix && pnpm build && pnpm buildcjs && pnpm test",
-    "test:ci": "pnpm prepublishOnly",
-    "tsc": "tsc -p tsconfig.build.json",
-    "tsc-alias": "tsc-alias -p tsconfig.build.json"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EmilianoBruni/kronosjs.git"
-  },
-  "keywords": [
-    "nodejs",
-    "typescript"
-  ],
-  "author": "Emiliano Bruni <info@ebruni.it>",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/EmilianoBruni/kronosjs/issues"
-  },
-  "homepage": "https://github.com/EmilianoBruni/kronosjs#readme",
-  "type": "module",
-  "dependencies": {
-    "@sinclair/typebox": "^0.34.40",
-    "chokidar": "^4.0.3",
-    "conf": "^14.0.0",
-    "cron": "^4.3.3",
-    "dayjs": "^1.11.13",
-    "directory-import": "^3.3.2",
-    "fastify": "^5.6.1",
-    "pino": "^9.11.0"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.33.0",
-    "@tsconfig/node20": "^20.1.6",
-    "@types/chai": "^5.2.2",
-    "@types/mocha": "^10.0.10",
-    "@types/node": "^24.2.1",
-    "@types/sinon": "^17.0.4",
-    "chai": "^6.0.1",
-    "eslint": "^9.33.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "globals": "^16.3.0",
-    "mocha": "^11.7.1",
-    "nyc": "^17.1.0",
-    "rimraf": "^6.0.1",
-    "rollup": "^4.46.2",
-    "sinon": "^21.0.0",
-    "tsc-alias": "^1.8.16",
-    "tsx": "^4.20.3",
-    "typescript": "^5.9.2",
-    "typescript-eslint": "^8.39.0"
-  },
-  "exports": {
-    "import": {
-      "default": "./dist/index.js",
-      "types": "./dist/types/index.d.js"
+    "name": "kronosjs",
+    "version": "0.1.0",
+    "description": "Manage, monitor, and control scheduled cron jobs with terminal integration and a simple REST API",
+    "main": "dist/index.js",
+    "scripts": {
+        "test": "mocha test/**/*.test.ts",
+        "test:coverage": "nyc --reporter=text mocha test/**/*.test.ts",
+        "buildcjs": "rollup ./dist/index.js --file ./dist/index.cjs --format cjs",
+        "build": "pnpm clean && pnpm tsc && pnpm tsc-alias",
+        "clean": "rimraf ./dist .tap",
+        "lint": "eslint \"src/**/*.[jt]s?(x)\" \"test/**/*.?(c)[jt]s\" \"examples/**/*.?(c)[jt]s\"",
+        "lint:fix": "pnpm lint --fix",
+        "prepublishOnly": "pnpm lint:fix && pnpm build && pnpm buildcjs && pnpm test",
+        "test:ci": "pnpm prepublishOnly",
+        "tsc": "tsc -p tsconfig.build.json",
+        "tsc-alias": "tsc-alias -p tsconfig.build.json"
     },
-    "require": "./dist/index.cjs"
-  },
-  "mocha": {
-    "node-option": [
-      "import=tsx"
-    ]
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "conf": "patches/conf.patch"
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/EmilianoBruni/kronosjs.git"
+    },
+    "keywords": [
+        "nodejs",
+        "typescript"
+    ],
+    "author": "Emiliano Bruni <info@ebruni.it>",
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/EmilianoBruni/kronosjs/issues"
+    },
+    "homepage": "https://github.com/EmilianoBruni/kronosjs#readme",
+    "type": "module",
+    "dependencies": {
+        "@sinclair/typebox": "^0.34.40",
+        "chokidar": "^4.0.3",
+        "conf": "^14.0.0",
+        "cron": "^4.3.3",
+        "dayjs": "^1.11.13",
+        "directory-import": "^3.3.2",
+        "fastify": "^5.6.1",
+        "pino": "^9.11.0"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.33.0",
+        "@tsconfig/node20": "^20.1.6",
+        "@types/chai": "^5.2.2",
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^24.2.1",
+        "@types/sinon": "^17.0.4",
+        "chai": "^6.0.1",
+        "eslint": "^9.33.0",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.4",
+        "globals": "^16.3.0",
+        "mocha": "^11.7.1",
+        "nyc": "^17.1.0",
+        "rimraf": "^6.0.1",
+        "rollup": "^4.46.2",
+        "sinon": "^21.0.0",
+        "tsc-alias": "^1.8.16",
+        "tsx": "^4.20.3",
+        "typescript": "^5.9.2",
+        "typescript-eslint": "^8.39.0"
+    },
+    "exports": {
+        "import": {
+            "default": "./dist/index.js",
+            "types": "./dist/types/index.d.js"
+        },
+        "require": "./dist/index.cjs"
+    },
+    "mocha": {
+        "node-option": [
+            "import=tsx"
+        ]
+    },
+    "pnpm": {
+        "patchedDependencies": {
+            "conf": "patches/conf.patch"
+        }
     }
-  }
 }
