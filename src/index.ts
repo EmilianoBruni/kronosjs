@@ -1,9 +1,9 @@
 // src/index.ts
 
-import type { KBaseParams } from './types.js';
+import type { KBaseParams, KCronConfig, KJob } from './types.js';
 
 import Kronos from './libs/Kronos.js';
 
 export default Kronos;
 
-export type { KBaseParams as CJBaseParams };
+export type { KBaseParams as CJBaseParams, KCronConfig, KJob };
