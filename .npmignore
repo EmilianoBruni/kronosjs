@@ -14,3 +14,4 @@ tsconfig.json
 tsconfig.build.json
 eslint.config.js
 .env.dev.local
+examples
