@@ -3,7 +3,13 @@ import Kronos from '@/index.js';
 const cm = await Kronos.create({
     logger: {
         stream: {
-            write: msg => process.stdout.write(JSON.parse(msg).msg + '\n')
+            write: msg => {
+                const msgObj = JSON.parse(msg);
+                const msgString = msgObj.jobId
+                    ? `[${msgObj.jobId}] ${msgObj.msg}`
+                    : msgObj.msg;
+                process.stdout.write(msgString + '\n');
+            }
         }
     },
     name: 'Hello World via console example'
