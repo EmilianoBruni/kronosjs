@@ -1,6 +1,6 @@
 import Fastify, { FastifyInstance } from 'fastify';
 import { KLogOptions } from '@/types.js';
-import Kronos from './Kronos.js';
+import type Kronos from './Kronos.js';
 
 class HttpServer {
     private fastify: FastifyInstance;
