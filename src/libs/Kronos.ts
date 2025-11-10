@@ -11,6 +11,7 @@ import Crontab from './Crontab.js';
 import LoggerCreate from './Logger.js';
 import { EventEmitter } from 'node:events';
 import HttpServer from './HttpServer.js';
+import { ListenKeyPress } from './ListenKeyPress.js';
 
 const className = 'Cron Job Manager';
 
@@ -21,6 +22,7 @@ class Kronos extends EventEmitter {
     directoryImport: DirectoryImport | undefined;
     log: KLog;
     httpServer: HttpServer | undefined;
+    listenKeyPress: ListenKeyPress | undefined;
 
     public static async create(config: KConfig) {
         const instance = new Kronos(config);
@@ -33,6 +35,8 @@ class Kronos extends EventEmitter {
         if (instance.httpServer) {
             await instance.httpServer.start();
         }
+        if (instance.config.terminal)
+            instance.listenKeyPress = new ListenKeyPress(instance);
         return instance;
     }
 
@@ -48,8 +52,8 @@ class Kronos extends EventEmitter {
             this.config.logger && this.config.logger === true
                 ? { level: 'info' }
                 : this.config.logger === false
-                  ? undefined
-                  : this.config.logger;
+                ? undefined
+                : this.config.logger;
         this.log = LoggerCreate({
             logger: logger,
             loggerInstance: this.config.loggerInstance

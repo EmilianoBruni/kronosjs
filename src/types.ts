@@ -63,6 +63,7 @@ export type KConfig = {
         host?: string;
         path?: string;
     };
+    terminal?: boolean;
 };
 
 /**

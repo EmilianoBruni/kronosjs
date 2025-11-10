@@ -1,6 +1,6 @@
 # kronosjs - Cron Job Manager for Node.js
 
-_Manage, monitor, and control scheduled cron jobs with TypeScript support, hot-reloading, terminal integration (TODO) and a REST API_
+_Manage, monitor, and control scheduled cron jobs with TypeScript support, hot-reloading, terminal integration and a REST API_
 
 [![npm package](https://img.shields.io/npm/v/@ebruni/kronosjs.svg)](http://npmjs.org/package/@ebruni/kronosjs)
 [![Build workflow](https://github.com/EmilianoBruni/kronosjs/actions/workflows/build.yml/badge.svg)](https://github.com/EmilianoBruni/kronosjs/actions/workflows/build.yml)
@@ -17,7 +17,7 @@ _Manage, monitor, and control scheduled cron jobs with TypeScript support, hot-r
 -   🔄 **Hot Reload**: Auto-reload job definitions when files change
 -   📝 **Crontab Support**: Persist job schedules in a crontab file
 -   🖥️ **REST API**: Built-in Fastify HTTP server for job management
--   🛠️ **CLI/Terminal UI**: Manual runs and live status monitoring (TODO)
+-   🛠️ **CLI/Terminal UI**: Manual runs and live status monitoring
 -   🪵 **Structured Logging**: Powered by [Pino](https://www.npmjs.com/package/pino) with per-job context
 -   ⚡ **TypeScript-first**: Full TypeScript support with comprehensive types
 -   🎯 **Timezone Support**: Schedule jobs in any timezone
