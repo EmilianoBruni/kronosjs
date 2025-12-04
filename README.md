@@ -102,19 +102,16 @@ Create a job file `jobs/hello_world.job.ts`:
 ```typescript
 import type { KCronConfig, KJob } from '@ebruni/kronosjs';
 
-function run(this: KJob) {
+export default function run(this: KJob) {
     this.log?.info('Hello, World!');
 }
 
-const config: KCronConfig = {
+export const config: KCronConfig = {
     name: 'hello_world_job',
     timezone: 'Europe/Rome', // default UTC
     schedule: '* * * * * *', // every second
     start: true
 };
-
-export default run;
-export { config };
 ```
 
 Then load it:
@@ -132,7 +129,7 @@ const cm = await Kronos.create({
     jobsDir: { base: `${__dirname}/jobs` }
 });
 
-await cm.start();
+cm.start();
 ```
 
 ### With HTTP Server
