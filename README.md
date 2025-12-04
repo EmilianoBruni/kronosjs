@@ -103,11 +103,12 @@ Create a job file `jobs/hello_world.job.ts`:
 import type { KCronConfig, KJob } from '@ebruni/kronosjs';
 
 function run(this: KJob) {
-    if (this.log) this.log.info('Hello, World!');
+    this.log?.info('Hello, World!');
 }
 
 const config: KCronConfig = {
     name: 'hello_world_job',
+    timezone: 'Europe/Rome', // default UTC
     schedule: '* * * * * *', // every second
     start: true
 };
