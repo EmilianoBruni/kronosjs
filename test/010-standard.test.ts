@@ -2,11 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import Kronos from '@/index.js';
 import { CronJob } from 'cron';
-import path from 'path';
-import fs from 'fs';
 import type { KNamedParams } from '@/types.js';
-
-const file = path.join(process.cwd(), 'test', `010-crontab-${Date.now()}.txt`);
 
 describe('Kronos', () => {
     let cm: InstanceType<typeof Kronos>;
@@ -16,28 +12,24 @@ describe('Kronos', () => {
         sinon.restore();
     });
 
-    after(async () => {
-        fs.unlinkSync(file);
-        if (cm.close) await cm.close();
-    });
-
     it('is a constructible class', async () => {
         expect(Kronos).to.be.a('function');
-        cm = await Kronos.create({ cronTabPath: file });
+        cm = await Kronos.create({});
         expect(cm).to.be.not.equal(null);
     });
 
     it('can register and manually run a job every second', async () => {
-        cm = await Kronos.create({ cronTabPath: file });
+        cm = await Kronos.create({});
 
         expect(cm).to.have.property('add');
 
         const onTick = sinon.spy();
-        const jobDef: KNamedParams = {
+        const jobDef: KNamedParams<null, null> = {
             name: 'test-job',
             cronTime: `* * * * * *`,
             start: false,
-            onTick
+            onTick,
+            waitForCompletion: false
         };
 
         // Add job
@@ -71,8 +63,8 @@ describe('Kronos', () => {
     });
 
     it('can get job by name or id and remove', async () => {
-        cm = await Kronos.create({ cronTabPath: file });
-        const jobDef: KNamedParams = {
+        cm = await Kronos.create({});
+        const jobDef: KNamedParams<null, null> = {
             name: 'test-job',
             cronTime: `* * * * * *`,
             start: false,
@@ -103,7 +95,7 @@ describe('Kronos', () => {
     });
 
     it('can add a CronTab instance', async () => {
-        cm = await Kronos.create({ cronTabPath: file });
+        cm = await Kronos.create({});
 
         const job = new CronJob('* * * * * *', () => {}, null, false);
 
@@ -115,7 +107,7 @@ describe('Kronos', () => {
     });
 
     it('can start and stop all jobs', async () => {
-        cm = await Kronos.create({ cronTabPath: file });
+        cm = await Kronos.create({});
 
         const onTick = sinon.spy();
         const clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
@@ -124,13 +116,15 @@ describe('Kronos', () => {
             name: 'job1',
             cronTime: '* * * * * *',
             start: false,
-            onTick
+            onTick,
+            waitForCompletion: false
         });
         const job2 = cm.add({
             name: 'job2',
             cronTime: '* * * * * *',
             start: false,
-            onTick
+            onTick,
+            waitForCompletion: false
         });
 
         expect(cm.count()).to.equal(2);
