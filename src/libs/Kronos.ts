@@ -37,6 +37,14 @@ class Kronos extends EventEmitter {
         }
         if (instance.config.terminal)
             instance.listenKeyPress = new ListenKeyPress(instance);
+        process.on('SIGINT', async () => {
+            await instance.close();
+            process.exit(0);
+        });
+        process.on('SIGTERM', async () => {
+            await instance.close();
+            process.exit(0);
+        });
         return instance;
     }
 
