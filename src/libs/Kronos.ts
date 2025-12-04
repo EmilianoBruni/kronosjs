@@ -133,15 +133,14 @@ class Kronos extends EventEmitter {
             }
         }
 
+        let job: KJob;
         if (cjParamsOrJob instanceof CronJob) {
-            const job = cjParamsOrJob as KJob;
-            job.log = this.log.child({ jobId: job.name });
-            this.jobs.set(cjParamsOrJob.name, job);
-            return job;
+            job = cjParamsOrJob as KJob;
+        } else {
+            job = CronJob.from(cjParamsOrJob) as KJob;
         }
-
-        const job = CronJob.from(cjParamsOrJob) as KJob;
         job.log = this.log.child({ jobId: job.name });
+        job.fireOnTick = this.#fireOnTickWrap(job.fireOnTick);
         this.jobs.set(cjParamsOrJob.name, job);
         return job;
     }
@@ -238,6 +237,20 @@ class Kronos extends EventEmitter {
             };
             this.add(jobCfg);
         }
+    }
+    #fireOnTickWrap(fireOnTick: (this: KJob) => void) {
+        return async function (this: KJob) {
+            const startTime = new Date();
+            this.log?.info(`Start`);
+            try {
+                fireOnTick.apply(this);
+            } catch (err) {
+                this.log?.error(`Error: ${(err as Error).message}`);
+            }
+            this.log?.info(
+                `Stop in ${new Date().getTime() - startTime.getTime()}ms`
+            );
+        };
     }
 }
 
