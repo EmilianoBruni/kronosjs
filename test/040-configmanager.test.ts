@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import { ConfigManager } from '@/libs/ConfigManager.js';
 import type { KCronConfig } from '@/types.ts';
 import { unlinkSync } from 'node:fs';
+import { waitForDebugger } from 'node:inspector';
 
 const tempDir = '/tmp';
 const fileName = 'test-config.json';
@@ -82,7 +83,8 @@ describe('ConfigManager', () => {
         expect(manager.get('job3')).to.deep.equal({
             schedule: '* * * * *',
             timezone: 'UTC',
-            start: true
+            start: true,
+            waitForCompletion: true
         });
     });
 });
