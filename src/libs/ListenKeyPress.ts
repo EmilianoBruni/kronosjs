@@ -62,15 +62,19 @@ export class ListenKeyPress {
             if (name.length > maxNameLength) {
                 maxNameLength = name.length;
             }
+        });
+        jobs.forEach((job, name) => {
             const nextDate = job.cronTime.getNextDateFrom(new Date()).toISO();
-            out += `\t#${i++}\t${name}\t${
+            out += `\t#${i++}\t${name.padEnd(maxNameLength, ' ')}\t${
+                job.isActive ? 'Yes' : 'No'
+            }\t${
                 job.isCallbackRunning ? 'Running' : 'Stopped'
             }\t\t${nextDate}\n`;
         });
         const nameTitle = 'Name'.padEnd(maxNameLength, ' ');
         out =
             '\nCron Jobs List:\n' +
-            `\tIdx\t${nameTitle}\tStatus\t\tNext Run\n` +
+            `\tIdx\t${nameTitle}\tActive\tStatus\t\tNext Run\n` +
             out;
         this.termOut(`${out}\n`);
     }
