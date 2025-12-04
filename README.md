@@ -108,9 +108,10 @@ export default function run(this: KJob) {
 
 export const config: KCronConfig = {
     name: 'hello_world_job',
-    timezone: 'Europe/Rome', // default UTC
+    timezone: 'UTC',
     schedule: '* * * * * *', // every second
-    start: true
+    start: true,
+    waitForCompletion: true
 };
 ```
 
