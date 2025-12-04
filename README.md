@@ -179,6 +179,25 @@ const cm = await Kronos.create({
 });
 ```
 
+### Complete configuration
+
+```typescript
+const devMode = process.env.NODE_ENV !== 'production';
+
+const cm = await Kronos.create({
+    // enable logger with different level based on environment
+    logger: { level: devMode ? 'debug' : 'info' },
+    // specify jobs directory
+    jobsDir: { base: `${__dirname}/jobs` },
+    // enable cron tab and set path in production
+    cronTabPath: devMode ? undefined : `${__dirname}/crontab`,
+    // enable terminal integration
+    terminal: true,
+    // enable HTTP for API access (default port 3000 binding to 0.0.0.0)
+    httpServer: true
+});
+```
+
 ## 🔌 REST API Endpoints
 
 When you enable the HTTP server, the following endpoints are available:
