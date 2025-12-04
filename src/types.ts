@@ -85,7 +85,8 @@ export const KCronConfigSchema = Type.Record(
             })
         ),
         timezone: Type.Optional(Type.String({ default: 'UTC' })),
-        start: Type.Optional(Type.Boolean({ default: true }))
+        start: Type.Optional(Type.Boolean({ default: true })),
+        waitForCompletion: Type.Optional(Type.Boolean({ default: true }))
     })
 );
 

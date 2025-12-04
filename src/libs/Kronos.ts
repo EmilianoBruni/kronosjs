@@ -137,6 +137,10 @@ class Kronos extends EventEmitter {
         if (cjParamsOrJob instanceof CronJob) {
             job = cjParamsOrJob as KJob;
         } else {
+            // if not defined waitForCompletion, set to true
+            if (cjParamsOrJob.waitForCompletion === undefined) {
+                cjParamsOrJob.waitForCompletion = true;
+            }
             job = CronJob.from(cjParamsOrJob) as KJob;
         }
         job.log = this.log.child({ jobId: job.name });
@@ -233,7 +237,12 @@ class Kronos extends EventEmitter {
                 cronTime: config?.schedule ? config.schedule : '0 * * * * *',
                 start: config?.start !== undefined ? config.start : false,
                 name: config?.name ? config.name : mod.moduleName,
-                onTick: job
+                onTick: job,
+                timeZone: config?.timezone ? config.timezone : 'UTC',
+                waitForCompletion:
+                    config?.waitForCompletion !== undefined
+                        ? config.waitForCompletion
+                        : true
             };
             this.add(jobCfg);
         }
