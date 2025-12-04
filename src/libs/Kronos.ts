@@ -247,18 +247,28 @@ class Kronos extends EventEmitter {
             this.add(jobCfg);
         }
     }
-    #fireOnTickWrap(fireOnTick: (this: KJob) => void) {
+    #fireOnTickWrap(fireOnTick: (this: KJob) => Promise<void>) {
         return async function (this: KJob) {
             const startTime = new Date();
-            this.log?.info(`Start`);
-            try {
-                fireOnTick.apply(this);
-            } catch (err) {
-                this.log?.error(`Error: ${(err as Error).message}`);
-            }
             this.log?.info(
-                `Stop in ${new Date().getTime() - startTime.getTime()}ms`
+                'Start' +
+                    (this.waitForCompletion
+                        ? ''
+                        : ' (unknown when end because waitForCompletion is false)')
             );
+            fireOnTick
+                .apply(this)
+                .then(() => {
+                    if (this.waitForCompletion)
+                        this.log?.info(
+                            `Stop in ${
+                                new Date().getTime() - startTime.getTime()
+                            }ms`
+                        );
+                })
+                .catch(err => {
+                    this.log?.error(err);
+                });
         };
     }
 }
