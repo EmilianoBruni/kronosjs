@@ -58,11 +58,13 @@ export type KConfig = {
     name?: string;
     logger?: boolean | KLogOptions;
     loggerInstance?: KLog;
-    httpServer?: {
-        port: number;
-        host?: string;
-        path?: string;
-    };
+    httpServer?:
+        | boolean
+        | {
+              port?: number;
+              host?: string;
+              path?: string;
+          };
     terminal?: boolean;
 };
 

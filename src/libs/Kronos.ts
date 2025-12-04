@@ -67,6 +67,9 @@ class Kronos extends EventEmitter {
             loggerInstance: this.config.loggerInstance
         }) as KLog;
         if (this.config.httpServer) {
+            if (this.config.httpServer === true) {
+                this.config.httpServer = {};
+            }
             this.httpServer = new HttpServer(
                 this,
                 this.config.logger,
