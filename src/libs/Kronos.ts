@@ -37,11 +37,11 @@ class Kronos extends EventEmitter {
         }
         if (instance.config.terminal)
             instance.listenKeyPress = new ListenKeyPress(instance);
-        process.on('SIGINT', async () => {
+        process.once('SIGINT', async () => {
             await instance.close();
             process.exit(0);
         });
-        process.on('SIGTERM', async () => {
+        process.once('SIGTERM', async () => {
             await instance.close();
             process.exit(0);
         });
@@ -192,6 +192,8 @@ class Kronos extends EventEmitter {
 
     async close() {
         this.log.info(`${this.config.name} shutting down...`);
+        process.removeAllListeners('SIGINT');
+        process.removeAllListeners('SIGTERM');
         this.stop();
         if (this.crontab) await this.crontab.close();
         if (this.directoryImport) await this.directoryImport.close();
