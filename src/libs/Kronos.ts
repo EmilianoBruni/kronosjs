@@ -183,7 +183,7 @@ class Kronos extends EventEmitter {
 
     start() {
         for (const job of this.jobs.values()) {
-            job.start();
+            if (job.isActive) job.start();
         }
     }
 
