@@ -36,19 +36,29 @@ describe('Kronos', () => {
         const job = cm.add(jobDef);
 
         expect(job.name).to.equal(jobDef.name);
-        expect(onTick.notCalled).to.equal(true);
+        expect(onTick.notCalled).to.equal(true, 'onTick not called yet');
 
         const clock = sinon.useFakeTimers();
 
+        expect(job.isActive).to.equal(
+            false,
+            'Job is not active when added with start: false'
+        );
+
         job.start();
-        expect(job.isActive).to.equal(true);
+        expect(job.isActive).to.equal(
+            true,
+            'Job is active because it was started with start()'
+        );
         clock.tick(1000);
-        expect(job.isActive).to.equal(true);
 
         job.stop();
-        expect(job.isActive).to.equal(false);
+        expect(job.isActive).to.equal(false, 'Job is stopped');
 
-        expect(onTick.calledOnce).to.equal(true);
+        expect(onTick.calledOnce).to.equal(
+            true,
+            'onTick called once after 1 second'
+        );
 
         onTick.resetHistory();
 
@@ -130,6 +140,11 @@ describe('Kronos', () => {
         expect(cm.count()).to.equal(2);
 
         cm.start();
+        expect(job1.isActive).to.equal(false);
+        expect(job2.isActive).to.equal(false);
+
+        job1.start();
+        job2.start();
         expect(job1.isActive).to.equal(true);
         expect(job2.isActive).to.equal(true);
 
