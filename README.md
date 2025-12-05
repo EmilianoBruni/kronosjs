@@ -1,4 +1,4 @@
-# kronosjs - Cron Job Manager for Node.js
+# <img src="assets/kronosjs-logo-64.png" alt="" height="64" width="64"/> kronosjs - Cron Job Manager for Node.js
 
 _Manage, monitor, and control scheduled cron jobs with TypeScript support, hot-reloading, terminal integration and a REST API_
 
