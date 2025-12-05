@@ -196,60 +196,6 @@ const cm = await Kronos.create({
 });
 ```
 
-## 🔌 REST API Endpoints
-
-When you enable the HTTP server, the following endpoints are available:
-
--   `GET /api/jobs` — List all jobs
--   `POST /api/jobs` — Create a job
--   `GET /api/jobs/:id` — Get job details
--   `POST /api/jobs/:id/start` — Start a job
--   `POST /api/jobs/:id/stop` — Stop a job
--   `DELETE /api/jobs/:id` — Delete a job
--   `GET /api/jobs/:id/logs?status=&q=&from=&to=` — Paginated logs
-
-### Health Check
-
--   `GET /health` — Server health status
-
-### Job Management
-
--   `GET /api/jobs` — List all jobs
-
-    ```json
-    { "total": 1, "items": ["hello_world"] }
-    ```
-
--   `GET /api/jobs/:jobName` — Get job details
-
-    ```json
-    {
-        "name": "hello_world",
-        "cronTime": "*/2 * * * * *",
-        "isActive": true,
-        "isRunning": false,
-        "lastDate": "2025-01-15T10:30:00.000Z",
-        "nextDate": "2025-01-15T10:30:02.000Z"
-    }
-    ```
-
--   `POST /api/jobs/:jobName/start` — Start a job
-
-    ```json
-    { "result": true, "status": "Job started" }
-    ```
-
--   `POST /api/jobs/:jobName/stop` — Stop a job
-
-    ```json
-    { "result": true, "status": "Job stopped" }
-    ```
-
--   `DELETE /api/jobs/:jobName` — Delete a job
-    ```json
-    { "result": true, "status": "Job removed" }
-    ```
-
 ## 📖 API Reference
 
 ### `Kronos.create(config: KConfig): Promise<Kronos>`
@@ -449,6 +395,64 @@ if (fastify) {
     });
 }
 ```
+
+### 🔌 REST API Endpoints
+
+When you enable the HTTP server, the following endpoints are available:
+
+-   `GET /api/jobs` — List all jobs
+-   `POST /api/jobs` — Create a job
+-   `GET /api/jobs/:id` — Get job details
+-   `POST /api/jobs/:id/start` — Start a job
+-   `POST /api/jobs/:id/stop` — Stop a job
+-   `DELETE /api/jobs/:id` — Delete a job
+-   `GET /api/jobs/:id/logs?status=&q=&from=&to=` — Paginated logs
+
+#### Health Check
+
+-   `GET /health` — Server health status
+
+    ```json
+    { "status": "ok" }
+    ```
+
+#### Job Management
+
+-   `GET /api/jobs` — List all jobs
+
+    ```json
+    { "total": 1, "items": ["hello_world"] }
+    ```
+
+-   `GET /api/jobs/:jobName` — Get job details
+
+    ```json
+    {
+        "name": "hello_world",
+        "cronTime": "*/2 * * * * *",
+        "isActive": true,
+        "isRunning": false,
+        "lastDate": "2025-01-15T10:30:00.000Z",
+        "nextDate": "2025-01-15T10:30:02.000Z"
+    }
+    ```
+
+-   `POST /api/jobs/:jobName/start` — Start a job
+
+    ```json
+    { "result": true, "status": "Job started" }
+    ```
+
+-   `POST /api/jobs/:jobName/stop` — Stop a job
+
+    ```json
+    { "result": true, "status": "Job stopped" }
+    ```
+
+-   `DELETE /api/jobs/:jobName` — Delete a job
+    ```json
+    { "result": true, "status": "Job removed" }
+    ```
 
 ## 📚 Examples
 
