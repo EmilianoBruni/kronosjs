@@ -75,7 +75,7 @@ class HttpServer {
                 isActive: job.isActive,
                 isRunning: job.isCallbackRunning,
                 lastDate: job.lastDate,
-                nextDate: job.nextDate
+                nextDate: job.cronTime.getNextDateFrom(new Date()).toISO()
             };
         });
 
