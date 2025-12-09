@@ -205,7 +205,7 @@ class HttpServer {
         const service = {
             name: `${process.env.APP}-${process.env.SERVICE}`,
             version: {
-                kronosjs: '0.1.3',
+                kronosjs: '0.1.4',
                 node: process.versions.node,
                 fastify: req.server.version
             },
