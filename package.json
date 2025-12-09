@@ -8,7 +8,7 @@
         "test:coverage": "nyc --reporter=text mocha test/**/*.test.ts",
         "buildcjs": "rollup ./dist/index.js --file ./dist/index.cjs --format cjs",
         "build": "pnpm clean && pnpm build:static && pnpm tsc && pnpm tsc-alias",
-        "build:static": "copyfiles -u 1 \"assets/kronosjs-logo-64.ico\" ./dist/assets/",
+        "build:static": "copyfiles -u 1 \"src/assets/**/*\" ./dist/",
         "build:watch": "concurrently -k -p \"[{name}]\" -n \"tsc,tsc-alias\" -c \"yellow.bold,cyan.bold\" \"pnpm tsc -w\" \"pnpm tsc-alias -w\"",
         "clean": "rimraf ./dist .tap",
         "lint": "eslint \"src/**/*.[jt]s?(x)\" \"test/**/*.?(c)[jt]s\" \"examples/**/*.?(c)[jt]s\"",
