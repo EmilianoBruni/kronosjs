@@ -1,6 +1,7 @@
-import Fastify, { FastifyInstance } from 'fastify';
+import Fastify, { FastifyRequest, type FastifyInstance } from 'fastify';
 import { KLogOptions } from '@/types.js';
 import type Kronos from './Kronos.js';
+import { hostname } from 'os';
 
 class HttpServer {
     private fastify: FastifyInstance;
@@ -114,6 +115,9 @@ class HttpServer {
             await this.kronos.remove(jobName, true);
             return { result: true, status: 'Job removed' };
         });
+
+        // GET /api/sysinfo
+        f.get('/api/sysinfo', this.#sysinfo);
     }
 
     /**
@@ -185,6 +189,30 @@ class HttpServer {
         }
         this.host = host;
     }
+
+    #sysinfo = async (req: FastifyRequest) => {
+        const service = {
+            name: `${process.env.APP}-${process.env.SERVICE}`,
+            version: {
+                kronosjs: '0.1.3',
+                node: process.versions.node,
+                fastify: req.server.version
+            },
+            hostname: process.env.HOSTNAME || hostname(),
+            debug: process.env.NODE_ENV !== 'production',
+            description:
+                process.env.npm_package_descriptioni ||
+                'Manage, monitor, and control scheduled cron jobs with terminal integration and a simple REST API',
+            uptime: Math.floor(process.uptime()),
+            // derive startTime from uptime
+            startTime: new Date(
+                Date.now() - Math.floor(process.uptime()) * 1000
+            ).toISOString(),
+            pid: process.pid
+        };
+
+        return { service };
+    };
 }
 
 export default HttpServer;

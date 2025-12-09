@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import Kronos from '../src/index.js';
 import type { FastifyInstance } from 'fastify';
+import { hostname } from 'os';
 
 describe('HTTP Server functionality', () => {
     let cm: Kronos;
@@ -127,5 +128,55 @@ describe('HTTP Server functionality', () => {
         payload = JSON.parse(response.payload);
         expect(payload).to.have.property('total', 0);
         expect(payload.items).to.be.an('array').that.has.lengthOf(0);
+    });
+
+    it('should return system information from /api/sysinfo', async () => {
+        const response = await fastify.inject({
+            method: 'GET',
+            url: '/api/sysinfo'
+        });
+
+        const payload = JSON.parse(response.payload);
+
+        // Check top-level structure
+        expect(payload).to.have.property('service');
+
+        const { service } = payload;
+
+        // Check service properties
+        expect(service).to.have.property('name');
+        expect(service.name).to.be.a('string');
+
+        expect(service).to.have.property('version');
+        expect(service.version).to.have.property('kronosjs');
+        expect(service.version).to.have.property('node');
+        expect(service.version).to.have.property('fastify');
+        expect(service.version.node).to.be.a('string');
+        expect(service.version.fastify).to.be.a('string');
+
+        expect(service).to.have.property('hostname');
+        expect(service.hostname).to.be.a('string');
+        // hostname must be current hostname
+        expect(service.hostname).to.equal(hostname());
+
+        expect(service).to.have.property('debug');
+        expect(service.debug).to.be.a('boolean');
+        // debug must match current debug mode
+        expect(service.debug).to.equal(process.env.NODE_ENV !== 'production');
+
+        expect(service).to.have.property('uptime');
+        expect(service.uptime).to.be.a('number');
+        expect(service.uptime).to.be.at.least(0);
+
+        expect(service).to.have.property('startTime');
+        expect(service.startTime).to.be.a('string');
+        // Verify it's a valid ISO date string
+        expect(new Date(service.startTime).toISOString()).to.equal(
+            service.startTime
+        );
+
+        expect(service).to.have.property('pid');
+        expect(service.pid).to.be.a('number');
+        expect(service.pid).to.equal(process.pid);
     });
 });
