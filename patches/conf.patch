@@ -1,17 +1,17 @@
 diff --git a/dist/source/index.js b/dist/source/index.js
-index 6c13a46b7a5fb2d7e2b22fc9672188535588ff85..0c6dd991928fe9f0f84dca1ab9996b7c044a8bce 100644
+index cae5fcbd08b52f9de9e6198f3af9cf0ccce850ac..51368cb067ddbfb219e3544790ef7ec13ebfc9f0 100644
 --- a/dist/source/index.js
 +++ b/dist/source/index.js
-@@ -65,11 +65,7 @@ export default class Conf {
-                 ...options.ajvOptions,
-             });
-             ajvFormats(ajv);
--            const schema = {
--                ...options.rootSchema,
--                type: 'object',
--                properties: options.schema,
--            };
-+            const schema = options.schema;
-             this.#validator = ajv.compile(schema);
-             for (const [key, value] of Object.entries(options.schema ?? {})) { // TODO: Remove the `as any`.
-                 if (value?.default) {
+@@ -539,11 +539,7 @@ export default class Conf {
+             ...options.ajvOptions,
+         });
+         ajvFormats(ajv);
+-        const schema = {
+-            ...options.rootSchema,
+-            type: 'object',
+-            properties: options.schema,
+-        };
++        const schema = options.schema;
+         this.#validator = ajv.compile(schema);
+         this.#captureSchemaDefaults(options.schema);
+     }
