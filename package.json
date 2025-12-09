@@ -34,38 +34,38 @@
     "homepage": "https://github.com/EmilianoBruni/kronosjs#readme",
     "type": "module",
     "dependencies": {
-        "@sinclair/typebox": "^0.34.40",
-        "chokidar": "^4.0.3",
-        "conf": "^14.0.0",
+        "@sinclair/typebox": "^0.34.41",
+        "chokidar": "^5.0.0",
+        "conf": "^15.0.2",
         "cron": "^4.3.5",
-        "dayjs": "^1.11.13",
+        "dayjs": "^1.11.19",
         "directory-import": "^3.3.2",
-        "fastify": "^5.6.1",
-        "pino": "^9.11.0"
+        "fastify": "^5.6.2",
+        "pino": "^10.1.0"
     },
     "devDependencies": {
-        "@eslint/js": "^9.33.0",
-        "@tsconfig/node20": "^20.1.6",
-        "@types/chai": "^5.2.2",
+        "@eslint/js": "^9.39.1",
+        "@tsconfig/node20": "^20.1.8",
+        "@types/chai": "^5.2.3",
         "@types/mocha": "^10.0.10",
-        "@types/node": "^24.2.1",
-        "@types/sinon": "^17.0.4",
-        "chai": "^6.0.1",
+        "@types/node": "^24.10.2",
+        "@types/sinon": "^21.0.0",
+        "chai": "^6.2.1",
         "concurrently": "^9.2.1",
         "copyfiles": "^2.4.1",
-        "eslint": "^9.33.0",
+        "eslint": "^9.39.1",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.4",
-        "globals": "^16.3.0",
-        "mocha": "^11.7.1",
+        "globals": "^16.5.0",
+        "mocha": "^11.7.5",
         "nyc": "^17.1.0",
-        "rimraf": "^6.0.1",
-        "rollup": "^4.46.2",
+        "rimraf": "^6.1.2",
+        "rollup": "^4.53.3",
         "sinon": "^21.0.0",
         "tsc-alias": "^1.8.16",
-        "tsx": "^4.20.3",
-        "typescript": "^5.9.2",
-        "typescript-eslint": "^8.39.0"
+        "tsx": "^4.21.0",
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.49.0"
     },
     "exports": {
         "import": {
@@ -83,5 +83,6 @@
         "patchedDependencies": {
             "conf": "patches/conf.patch"
         }
-    }
+    },
+    "packageManager": "pnpm@10.10.0+sha512.d615db246fe70f25dcfea6d8d73dee782ce23e2245e3c4f6f888249fb568149318637dca73c2c5c8ef2a4ca0d5657fb9567188bfab47f566d1ee6ce987815c39"
 }
