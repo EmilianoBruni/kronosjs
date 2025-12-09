@@ -179,4 +179,18 @@ describe('HTTP Server functionality', () => {
         expect(service.pid).to.be.a('number');
         expect(service.pid).to.equal(process.pid);
     });
+
+    it('should serve favicon.ico', async () => {
+        const response = await fastify.inject({
+            method: 'GET',
+            url: '/favicon.ico'
+        });
+
+        expect(response.statusCode).to.equal(200);
+        expect(response.headers['content-type']).to.equal(
+            'image/vnd.microsoft.icon'
+        );
+        expect(response.rawPayload).to.be.instanceOf(Buffer);
+        expect(response.rawPayload.length).to.be.greaterThan(0);
+    });
 });

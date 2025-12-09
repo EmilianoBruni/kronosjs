@@ -2,6 +2,11 @@ import Fastify, { FastifyRequest, type FastifyInstance } from 'fastify';
 import { KLogOptions } from '@/types.js';
 import type Kronos from './Kronos.js';
 import { hostname } from 'os';
+import { createReadStream } from 'fs';
+
+const __dirname = new URL('.', import.meta.url).pathname;
+const FAVICON_PATH = __dirname + '../assets/kronosjs-logo-64.ico';
+const FAVICON_MIME = 'image/vnd.microsoft.icon';
 
 class HttpServer {
     private fastify: FastifyInstance;
@@ -118,6 +123,12 @@ class HttpServer {
 
         // GET /api/sysinfo
         f.get('/api/sysinfo', this.#sysinfo);
+
+        // GET /favicon.ico sending ./assets/kronos-logo-64.ico with fastify
+        f.get('/favicon.ico', async (_, reply) => {
+            const stream = createReadStream(FAVICON_PATH);
+            return reply.type(FAVICON_MIME).send(stream);
+        });
     }
 
     /**
